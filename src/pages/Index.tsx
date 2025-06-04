@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,9 +12,11 @@ import AlertHistory from '@/components/AlertHistory';
 import ReputationDisplay from '@/components/ReputationDisplay';
 import HeroSection from '@/components/HeroSection';
 import SocialProof from '@/components/SocialProof';
+import DemoMode from '@/components/DemoMode';
 
 const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [activeAlert, setActiveAlert] = useState<any>(null);
   const [nearbyResponders, setNearbyResponders] = useState([
@@ -59,7 +62,7 @@ const Index = () => {
   }, []);
 
   const handleEmergencyTrigger = async () => {
-    if (!isConnected) {
+    if (!isDemoMode && !isConnected) {
       toast({
         title: "Connect wallet first",
         description: "You need to connect your wallet to trigger alerts.",
@@ -81,7 +84,7 @@ const Index = () => {
       id: Date.now(),
       location: userLocation,
       timestamp: new Date(),
-      status: 'active',
+      status: isDemoMode ? 'demo' : 'active',
       type: 'emergency'
     };
 
@@ -121,9 +124,11 @@ const Index = () => {
   };
 
   const handleTryDemo = () => {
+    setIsDemoMode(true);
+    
     toast({
       title: "Demo Mode Activated! 🎯",
-      description: "This is how the emergency system works. Connect your wallet to send real alerts.",
+      description: "This is how the emergency system works. Experience the full Guardian response.",
       className: "border-blue-500"
     });
     
@@ -138,24 +143,32 @@ const Index = () => {
     
     setActiveAlert(demoAlert);
     console.log('Demo mode activated:', demoAlert);
-
-    // Scroll to emergency section
-    if (emergencyRef.current) {
-      emergencyRef.current.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-
-    // Show responder alert after 3 seconds
-    setTimeout(() => {
-      toast({
-        title: "🚨 Verified Responder On The Way!",
-        description: "Marcus J. is 2 minutes away and heading to your location.",
-        className: "border-safe-500 bg-safe-50"
-      });
-    }, 3000);
   };
+
+  const handleExitDemo = () => {
+    setIsDemoMode(false);
+    setActiveAlert(null);
+    setNearbyResponders(prev => prev.map(responder => ({ ...responder, responding: false })));
+    
+    toast({
+      title: "Demo Mode Ended",
+      description: "Connect your wallet to access real emergency features.",
+      className: "border-gray-500"
+    });
+  };
+
+  if (isDemoMode) {
+    return (
+      <DemoMode
+        onExit={handleExitDemo}
+        userLocation={userLocation}
+        nearbyResponders={nearbyResponders}
+        activeAlert={activeAlert}
+        onEmergencyTrigger={handleEmergencyTrigger}
+        userReputation={userReputation}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
