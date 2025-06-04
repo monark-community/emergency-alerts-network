@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,7 +14,12 @@ const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [activeAlert, setActiveAlert] = useState<any>(null);
-  const [nearbyResponders, setNearbyResponders] = useState([]);
+  const [nearbyResponders, setNearbyResponders] = useState([
+    { id: 1, location: { lat: 40.7128, lng: -74.0060 }, reputation: 92, responding: false },
+    { id: 2, location: { lat: 40.7130, lng: -74.0058 }, reputation: 78, responding: false },
+    { id: 3, location: { lat: 40.7126, lng: -74.0062 }, reputation: 95, responding: false },
+    { id: 4, location: { lat: 40.7132, lng: -74.0056 }, reputation: 83, responding: false }
+  ]);
   const [userReputation, setUserReputation] = useState(85);
 
   useEffect(() => {
@@ -23,10 +27,20 @@ const Index = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation({
+          const newLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
-          });
+          };
+          setUserLocation(newLocation);
+          
+          // Update nearby responders based on actual user location
+          const mockResponders = [
+            { id: 1, location: { lat: newLocation.lat + 0.001, lng: newLocation.lng + 0.001 }, reputation: 92, responding: false },
+            { id: 2, location: { lat: newLocation.lat - 0.0015, lng: newLocation.lng + 0.0008 }, reputation: 78, responding: false },
+            { id: 3, location: { lat: newLocation.lat + 0.0008, lng: newLocation.lng - 0.0012 }, reputation: 95, responding: false },
+            { id: 4, location: { lat: newLocation.lat - 0.0005, lng: newLocation.lng - 0.0018 }, reputation: 83, responding: false }
+          ];
+          setNearbyResponders(mockResponders);
           console.log('User location obtained:', position.coords);
         },
         (error) => {
@@ -70,13 +84,10 @@ const Index = () => {
 
     setActiveAlert(newAlert);
     
-    // Simulate finding nearby responders
-    const mockResponders = [
-      { id: 1, location: { lat: userLocation.lat + 0.001, lng: userLocation.lng + 0.001 }, reputation: 92, responding: true },
-      { id: 2, location: { lat: userLocation.lat - 0.0015, lng: userLocation.lng + 0.0008 }, reputation: 78, responding: false },
-      { id: 3, location: { lat: userLocation.lat + 0.0008, lng: userLocation.lng - 0.0012 }, reputation: 95, responding: true }
-    ];
-    setNearbyResponders(mockResponders);
+    // Update responders to show some are responding
+    setNearbyResponders(prev => prev.map((responder, index) => 
+      index < 2 ? { ...responder, responding: true } : responder
+    ));
 
     toast({
       title: "Emergency alert sent! 🚨",
