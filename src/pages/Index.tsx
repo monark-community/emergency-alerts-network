@@ -9,6 +9,8 @@ import ResponderMap from '@/components/ResponderMap';
 import WalletConnection from '@/components/WalletConnection';
 import AlertHistory from '@/components/AlertHistory';
 import ReputationDisplay from '@/components/ReputationDisplay';
+import HeroSection from '@/components/HeroSection';
+import SocialProof from '@/components/SocialProof';
 
 const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -117,6 +119,26 @@ const Index = () => {
     console.log('Responding to alert:', alertId);
   };
 
+  const handleTryDemo = () => {
+    toast({
+      title: "Demo Mode Activated! 🎯",
+      description: "This is how the emergency system works. Connect your wallet to send real alerts.",
+      className: "border-blue-500"
+    });
+    
+    // Simulate demo alert
+    const demoAlert = {
+      id: Date.now(),
+      location: userLocation || { lat: 40.7128, lng: -74.0060 },
+      timestamp: new Date(),
+      status: 'demo',
+      type: 'emergency'
+    };
+    
+    setActiveAlert(demoAlert);
+    console.log('Demo mode activated:', demoAlert);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Header */}
@@ -135,35 +157,45 @@ const Index = () => {
         </div>
       </header>
 
+      {/* Hero Section - Only show for non-connected users */}
+      {!isConnected && (
+        <HeroSection 
+          onConnectWallet={() => setIsConnected(true)} 
+          onTryDemo={handleTryDemo}
+        />
+      )}
+
       <div className="max-w-6xl mx-auto p-4 space-y-6">
-        {/* Status Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="border-safe-200 bg-safe-50">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <CheckCircle className="w-8 h-8 text-safe-600" />
-                <div>
-                  <p className="text-sm font-medium text-safe-800">Status</p>
-                  <p className="text-lg font-bold text-safe-600">Safe</p>
+        {/* Status Cards - Only show for connected users */}
+        {isConnected && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="border-safe-200 bg-safe-50">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="w-8 h-8 text-safe-600" />
+                  <div>
+                    <p className="text-sm font-medium text-safe-800">Status</p>
+                    <p className="text-lg font-bold text-safe-600">Safe</p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card className="border-blue-200 bg-blue-50">
-            <CardContent className="p-4">
-              <div className="flex items-center space-x-3">
-                <Users className="w-8 h-8 text-blue-600" />
-                <div>
-                  <p className="text-sm font-medium text-blue-800">Nearby Responders</p>
-                  <p className="text-lg font-bold text-blue-600">{nearbyResponders.length}</p>
+            <Card className="border-blue-200 bg-blue-50">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <Users className="w-8 h-8 text-blue-600" />
+                  <div>
+                    <p className="text-sm font-medium text-blue-800">Nearby Responders</p>
+                    <p className="text-lg font-bold text-blue-600">{nearbyResponders.length}</p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <ReputationDisplay reputation={userReputation} />
-        </div>
+            <ReputationDisplay reputation={userReputation} />
+          </div>
+        )}
 
         {/* Emergency Button Section */}
         <Card className="border-2 border-emergency-200">
@@ -180,14 +212,16 @@ const Index = () => {
             
             {activeAlert && (
               <div className="animate-fade-in w-full max-w-md">
-                <Card className="border-emergency-300 bg-emergency-50">
+                <Card className={`border-emergency-300 ${activeAlert.status === 'demo' ? 'bg-blue-50' : 'bg-emergency-50'}`}>
                   <CardContent className="p-4">
                     <div className="flex items-center space-x-3">
-                      <AlertCircle className="w-6 h-6 text-emergency-600 animate-pulse-emergency" />
+                      <AlertCircle className={`w-6 h-6 ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600 animate-pulse-emergency'}`} />
                       <div>
-                        <p className="font-semibold text-emergency-800">Active Emergency Alert</p>
-                        <p className="text-sm text-emergency-600">
-                          Sent at {activeAlert.timestamp.toLocaleTimeString()}
+                        <p className={`font-semibold ${activeAlert.status === 'demo' ? 'text-blue-800' : 'text-emergency-800'}`}>
+                          {activeAlert.status === 'demo' ? 'Demo Alert Active' : 'Active Emergency Alert'}
+                        </p>
+                        <p className={`text-sm ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600'}`}>
+                          {activeAlert.status === 'demo' ? 'Demo started at' : 'Sent at'} {activeAlert.timestamp.toLocaleTimeString()}
                         </p>
                       </div>
                     </div>
@@ -223,9 +257,12 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        {/* Alert History */}
-        <AlertHistory />
+        {/* Alert History - Only show for connected users */}
+        {isConnected && <AlertHistory />}
       </div>
+
+      {/* Social Proof Section - Only show for non-connected users */}
+      {!isConnected && <SocialProof />}
     </div>
   );
 };
