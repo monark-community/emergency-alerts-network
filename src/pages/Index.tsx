@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +23,7 @@ const Index = () => {
     { id: 4, location: { lat: 40.7132, lng: -74.0056 }, reputation: 83, responding: false }
   ]);
   const [userReputation, setUserReputation] = useState(85);
+  const emergencyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Get user location
@@ -137,6 +138,23 @@ const Index = () => {
     
     setActiveAlert(demoAlert);
     console.log('Demo mode activated:', demoAlert);
+
+    // Scroll to emergency section
+    if (emergencyRef.current) {
+      emergencyRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+
+    // Show responder alert after 3 seconds
+    setTimeout(() => {
+      toast({
+        title: "🚨 Verified Responder On The Way!",
+        description: "Marcus J. is 2 minutes away and heading to your location.",
+        className: "border-safe-500 bg-safe-50"
+      });
+    }, 3000);
   };
 
   return (
@@ -198,46 +216,48 @@ const Index = () => {
         )}
 
         {/* Emergency Button Section */}
-        <Card className="border-2 border-emergency-200">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
-            <p className="text-gray-600">Press the button below if you need immediate assistance</p>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center space-y-6">
-            <EmergencyButton 
-              onTrigger={handleEmergencyTrigger}
-              isActive={!!activeAlert}
-              disabled={!isConnected || !userLocation}
-            />
-            
-            {activeAlert && (
-              <div className="animate-fade-in w-full max-w-md">
-                <Card className={`border-emergency-300 ${activeAlert.status === 'demo' ? 'bg-blue-50' : 'bg-emergency-50'}`}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-3">
-                      <AlertCircle className={`w-6 h-6 ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600 animate-pulse-emergency'}`} />
-                      <div>
-                        <p className={`font-semibold ${activeAlert.status === 'demo' ? 'text-blue-800' : 'text-emergency-800'}`}>
-                          {activeAlert.status === 'demo' ? 'Demo Alert Active' : 'Active Emergency Alert'}
-                        </p>
-                        <p className={`text-sm ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600'}`}>
-                          {activeAlert.status === 'demo' ? 'Demo started at' : 'Sent at'} {activeAlert.timestamp.toLocaleTimeString()}
-                        </p>
+        <div ref={emergencyRef}>
+          <Card className="border-2 border-emergency-200">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
+              <p className="text-gray-600">Press the button below if you need immediate assistance</p>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center space-y-6">
+              <EmergencyButton 
+                onTrigger={handleEmergencyTrigger}
+                isActive={!!activeAlert}
+                disabled={!isConnected || !userLocation}
+              />
+              
+              {activeAlert && (
+                <div className="animate-fade-in w-full max-w-md">
+                  <Card className={`border-emergency-300 ${activeAlert.status === 'demo' ? 'bg-blue-50' : 'bg-emergency-50'}`}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center space-x-3">
+                        <AlertCircle className={`w-6 h-6 ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600 animate-pulse-emergency'}`} />
+                        <div>
+                          <p className={`font-semibold ${activeAlert.status === 'demo' ? 'text-blue-800' : 'text-emergency-800'}`}>
+                            {activeAlert.status === 'demo' ? 'Demo Alert Active' : 'Active Emergency Alert'}
+                          </p>
+                          <p className={`text-sm ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600'}`}>
+                            {activeAlert.status === 'demo' ? 'Demo started at' : 'Sent at'} {activeAlert.timestamp.toLocaleTimeString()}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {!isConnected && (
-              <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <Wallet className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
-                <p className="text-yellow-800 font-medium">Connect your wallet to enable emergency features</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+              
+              {!isConnected && (
+                <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <Wallet className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
+                  <p className="text-yellow-800 font-medium">Connect your wallet to enable emergency features</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Map Section */}
         <Card>
