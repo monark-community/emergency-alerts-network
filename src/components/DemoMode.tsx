@@ -39,39 +39,40 @@ const DemoMode = ({
           if (prev <= 1) {
             clearInterval(countdownInterval);
             setShowEmergencyDialog(false);
+            // Emergency services contacted at T+10 seconds
             toast({
               title: "🚨 Emergency Services Contacted",
               description: "Police and ambulance have been notified and are on their way. Nearby responders have also been alerted.",
               className: "border-red-500 bg-red-50"
             });
+            
+            // Show responder notification 3 seconds after emergency services (T+13 seconds)
+            setTimeout(() => {
+              toast({
+                title: "🚨 Verified Responder On The Way!",
+                description: "Marcus J. is 2 minutes away and heading to your location.",
+                className: "border-safe-500 bg-safe-50"
+              });
+              
+              setShowResponderPin(true);
+              
+              // Show responder arrival 3 seconds after responder notification (T+16 seconds)
+              setTimeout(() => {
+                toast({
+                  title: "✅ Responder Has Arrived",
+                  description: "Marcus J. has arrived at your location and is ready to assist.",
+                  className: "border-green-500 bg-green-50"
+                });
+              }, 3000);
+            }, 3000);
+            
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
 
-      // Show responder notification after 5 seconds (2 seconds after emergency services)
-      const responderTimer = setTimeout(() => {
-        toast({
-          title: "🚨 Verified Responder On The Way!",
-          description: "Marcus J. is 2 minutes away and heading to your location.",
-          className: "border-safe-500 bg-safe-50"
-        });
-        
-        setShowResponderPin(true);
-        
-        // Show responder arrival after another 3 seconds
-        setTimeout(() => {
-          toast({
-            title: "✅ Responder Has Arrived",
-            description: "Marcus J. has arrived at your location and is ready to assist.",
-            className: "border-green-500 bg-green-50"
-          });
-        }, 3000);
-      }, 5000);
-
       return () => {
-        clearTimeout(responderTimer);
         clearInterval(countdownInterval);
       };
     }
