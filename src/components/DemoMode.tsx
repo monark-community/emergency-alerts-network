@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,7 +24,6 @@ const DemoMode = ({
   onEmergencyTrigger,
   userReputation 
 }: DemoModeProps) => {
-  const [showExitButton, setShowExitButton] = useState(false);
   const [showResponderPin, setShowResponderPin] = useState(false);
   const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
   const [countdown, setCountdown] = useState(10);
@@ -68,11 +68,6 @@ const DemoMode = ({
             description: "Marcus J. has arrived at your location and is ready to assist.",
             className: "border-green-500 bg-green-50"
           });
-          
-          // Show exit button after responder arrival
-          setTimeout(() => {
-            setShowExitButton(true);
-          }, 2000);
         }, 3000);
       }, 3000);
 
@@ -94,36 +89,6 @@ const DemoMode = ({
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto flex flex-col">
-      {/* Emergency Services Dialog */}
-      {showEmergencyDialog && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <Card className="max-w-md w-full border-red-300 bg-red-50">
-            <CardHeader className="text-center">
-              <div className="flex items-center justify-center space-x-2 mb-2">
-                <Phone className="w-8 h-8 text-red-600" />
-                <AlertCircle className="w-8 h-8 text-red-600 animate-pulse" />
-              </div>
-              <CardTitle className="text-red-800">Contact Emergency Services?</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center space-y-4">
-              <p className="text-red-700">
-                Emergency services will be contacted automatically in:
-              </p>
-              <div className="text-4xl font-bold text-red-600">
-                {countdown}
-              </div>
-              <Button 
-                onClick={handleCancelEmergencyServices}
-                variant="outline"
-                className="border-red-300 text-red-700 hover:bg-red-100"
-              >
-                Cancel - Don't Contact Emergency Services
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
@@ -189,39 +154,62 @@ const DemoMode = ({
               <p className="text-gray-600">Press the button below if you need immediate assistance</p>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-6 flex-1 justify-center">
-              <EmergencyButton 
-                onTrigger={onEmergencyTrigger}
-                isActive={!!activeAlert}
-                disabled={false}
-              />
-              
-              {activeAlert && (
-                <div className="animate-fade-in w-full max-w-md">
-                  <Card className="border-blue-300 bg-blue-50">
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <AlertCircle className="w-6 h-6 text-blue-600" />
-                        <div>
-                          <p className="font-semibold text-blue-800">Demo Alert Active</p>
-                          <p className="text-sm text-blue-600">
-                            Demo started at {activeAlert.timestamp.toLocaleTimeString()}
-                          </p>
-                        </div>
+              {/* Emergency Services Dialog - Integrated into card */}
+              {showEmergencyDialog && (
+                <div className="w-full max-w-md animate-fade-in">
+                  <Card className="border-red-300 bg-red-50">
+                    <CardHeader className="text-center">
+                      <div className="flex items-center justify-center space-x-2 mb-2">
+                        <Phone className="w-8 h-8 text-red-600" />
+                        <AlertCircle className="w-8 h-8 text-red-600 animate-pulse" />
                       </div>
+                      <CardTitle className="text-red-800">Contact Emergency Services?</CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-center space-y-4">
+                      <p className="text-red-700">
+                        Emergency services will be contacted automatically in:
+                      </p>
+                      <div className="text-4xl font-bold text-red-600">
+                        {countdown}
+                      </div>
+                      <Button 
+                        onClick={handleCancelEmergencyServices}
+                        variant="outline"
+                        className="border-red-300 text-red-700 hover:bg-red-100"
+                      >
+                        Cancel - Don't Contact Emergency Services
+                      </Button>
                     </CardContent>
                   </Card>
                 </div>
               )}
 
-              {showExitButton && (
-                <div className="animate-fade-in">
-                  <Button 
-                    onClick={onExit}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    Exit Demo Mode
-                  </Button>
-                </div>
+              {!showEmergencyDialog && (
+                <>
+                  <EmergencyButton 
+                    onTrigger={onEmergencyTrigger}
+                    isActive={!!activeAlert}
+                    disabled={false}
+                  />
+                  
+                  {activeAlert && (
+                    <div className="animate-fade-in w-full max-w-md">
+                      <Card className="border-blue-300 bg-blue-50">
+                        <CardContent className="p-4">
+                          <div className="flex items-center space-x-3">
+                            <AlertCircle className="w-6 h-6 text-blue-600" />
+                            <div>
+                              <p className="font-semibold text-blue-800">Demo Alert Active</p>
+                              <p className="text-sm text-blue-600">
+                                Demo started at {activeAlert.timestamp.toLocaleTimeString()}
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
+                </>
               )}
             </CardContent>
           </div>
