@@ -12,6 +12,7 @@ import ReputationDisplay from '@/components/ReputationDisplay';
 import HeroSection from '@/components/HeroSection';
 import SocialProof from '@/components/SocialProof';
 import DemoMode from '@/components/DemoMode';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -283,6 +284,9 @@ const Index = () => {
 
       {/* Social Proof Section - Only show for non-connected users */}
       {!isConnected && <SocialProof />}
+
+      {/* Footer - Always show */}
+      <Footer />
     </div>
   );
 };

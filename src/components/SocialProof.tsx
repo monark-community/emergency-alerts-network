@@ -45,10 +45,6 @@ const SocialProof = () => {
     { label: "Responder Satisfaction", value: "96%", trend: "+2%" }
   ];
 
-  const partnerships = [
-    "UC Berkeley", "Stanford University", "Austin City Safety", "Seattle Community Watch"
-  ];
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-16 space-y-16">
       {/* Community Stats */}
@@ -133,26 +129,6 @@ const SocialProof = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Trust Indicators */}
-      <div className="text-center space-y-8">
-        <div className="space-y-4">
-          <Badge variant="outline" className="bg-warning-50 border-warning-200 text-warning-700">
-            🤝 Trusted Partners
-          </Badge>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Partnered with leading institutions
-          </h2>
-        </div>
-        
-        <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
-          {partnerships.map((partner, index) => (
-            <div key={index} className="text-gray-600 font-medium text-sm md:text-base">
-              {partner}
-            </div>
           ))}
         </div>
       </div>
