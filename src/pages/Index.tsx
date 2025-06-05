@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { AlertCircle, MapPin, Shield, Users, Wallet, CheckCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import EmergencyButton from '@/components/EmergencyButton';
-import ResponderMap from '@/components/ResponderMap';
 import WalletConnection from '@/components/WalletConnection';
 import AlertHistory from '@/components/AlertHistory';
 import ReputationDisplay from '@/components/ReputationDisplay';
@@ -259,24 +258,6 @@ const Index = () => {
             </CardContent>
           </Card>
         </div>
-
-        {/* Map Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <MapPin className="w-5 h-5" />
-              <span>Nearby Responders & Alerts</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponderMap 
-              userLocation={userLocation}
-              responders={nearbyResponders}
-              activeAlert={activeAlert}
-              onRespondToAlert={handleRespondToAlert}
-            />
-          </CardContent>
-        </Card>
 
         {/* Alert History - Only show for connected users */}
         {isConnected && <AlertHistory />}
