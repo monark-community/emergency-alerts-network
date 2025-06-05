@@ -7,12 +7,14 @@ interface EmergencyButtonProps {
   onTrigger: () => void;
   isActive: boolean;
   disabled?: boolean;
+  showSendAlert?: boolean;
 }
 
 const EmergencyButton: React.FC<EmergencyButtonProps> = ({ 
   onTrigger, 
   isActive, 
-  disabled = false 
+  disabled = false,
+  showSendAlert = false
 }) => {
   return (
     <div className="relative">
@@ -27,7 +29,9 @@ const EmergencyButton: React.FC<EmergencyButtonProps> = ({
       >
         <div className="flex flex-col items-center space-y-2">
           <AlertTriangle className="w-12 h-12" />
-          <span>{isActive ? 'ALERT SENT' : 'EMERGENCY'}</span>
+          <span>
+            {showSendAlert ? 'SEND ALERT' : (isActive ? 'ALERT SENT' : 'EMERGENCY')}
+          </span>
         </div>
       </Button>
       

@@ -18,6 +18,7 @@ const Index = () => {
   const [isDemoMode, setIsDemoMode] = useState(false);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [activeAlert, setActiveAlert] = useState<any>(null);
+  const [alertSent, setAlertSent] = useState(false);
   const [nearbyResponders, setNearbyResponders] = useState([
     { id: 1, location: { lat: 40.7128, lng: -74.0060 }, reputation: 92, responding: false },
     { id: 2, location: { lat: 40.7130, lng: -74.0058 }, reputation: 78, responding: false },
@@ -60,11 +61,11 @@ const Index = () => {
     }
   }, []);
 
-  const handleEmergencyTrigger = async () => {
+  const handleSendAlert = () => {
     if (!isDemoMode && !isConnected) {
       toast({
         title: "Connect wallet first",
-        description: "You need to connect your wallet to trigger alerts.",
+        description: "You need to connect your wallet to send alerts.",
         variant: "destructive"
       });
       return;
@@ -79,6 +80,18 @@ const Index = () => {
       return;
     }
 
+    setAlertSent(true);
+    
+    toast({
+      title: "Alert sent! 🚨",
+      description: "Your emergency alert has been sent. Emergency services will be contacted shortly.",
+      className: "border-emergency-500"
+    });
+
+    console.log('Alert sent');
+  };
+
+  const handleEmergencyTrigger = async () => {
     const newAlert = {
       id: Date.now(),
       location: userLocation,
@@ -95,7 +108,7 @@ const Index = () => {
     ));
 
     toast({
-      title: "Emergency alert sent! 🚨",
+      title: "Emergency services contacted! 🚨",
       description: "Nearby responders have been notified. Help is on the way.",
       className: "border-emergency-500"
     });
@@ -147,6 +160,7 @@ const Index = () => {
   const handleExitDemo = () => {
     setIsDemoMode(false);
     setActiveAlert(null);
+    setAlertSent(false);
     setNearbyResponders(prev => prev.map(responder => ({ ...responder, responding: false })));
     
     toast({
@@ -220,14 +234,25 @@ const Index = () => {
           <Card className="border-2 border-emergency-200">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
-              <p className="text-gray-600">Press the button below if you need immediate assistance</p>
+              <p className="text-gray-600">
+                {!alertSent ? "Press the button below if you need immediate assistance" : "Emergency services will be contacted automatically"}
+              </p>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-6">
-              <EmergencyButton 
-                onTrigger={handleEmergencyTrigger}
-                isActive={!!activeAlert}
-                disabled={!isConnected || !userLocation}
-              />
+              {!alertSent ? (
+                <EmergencyButton 
+                  onTrigger={handleSendAlert}
+                  isActive={false}
+                  disabled={!isConnected || !userLocation}
+                  showSendAlert={true}
+                />
+              ) : (
+                <EmergencyButton 
+                  onTrigger={handleEmergencyTrigger}
+                  isActive={!!activeAlert}
+                  disabled={false}
+                />
+              )}
               
               {activeAlert && (
                 <div className="animate-fade-in w-full max-w-md">
