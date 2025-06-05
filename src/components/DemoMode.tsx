@@ -26,6 +26,7 @@ const DemoMode = ({
   const [showResponderPin, setShowResponderPin] = useState(false);
   const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
   const [countdown, setCountdown] = useState(10);
+  const [showDemoBanner, setShowDemoBanner] = useState(true);
 
   useEffect(() => {
     if (activeAlert && activeAlert.status === 'demo') {
@@ -46,7 +47,7 @@ const DemoMode = ({
               className: "border-red-500 bg-red-50"
             });
             
-            // Show responder notification 3 seconds after emergency services (T+13 seconds)
+            // Show responder notification 5 seconds after emergency services (T+15 seconds)
             setTimeout(() => {
               toast({
                 title: "🚨 Verified Responder On The Way!",
@@ -56,15 +57,15 @@ const DemoMode = ({
               
               setShowResponderPin(true);
               
-              // Show responder arrival 3 seconds after responder notification (T+16 seconds)
+              // Show responder arrival 5 seconds after responder notification (T+20 seconds)
               setTimeout(() => {
                 toast({
                   title: "✅ Responder Has Arrived",
                   description: "Marcus J. has arrived at your location and is ready to assist.",
                   className: "border-green-500 bg-green-50"
                 });
-              }, 3000);
-            }, 3000);
+              }, 5000);
+            }, 5000);
             
             return 0;
           }
@@ -89,8 +90,28 @@ const DemoMode = ({
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto flex flex-col">
+      {/* Persistent Demo Banner */}
+      {showDemoBanner && (
+        <div className="fixed top-0 left-0 right-0 bg-blue-600 text-white px-4 py-3 flex items-center justify-between z-[60] shadow-lg">
+          <div className="flex items-center space-x-3">
+            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+              <Shield className="w-4 h-4 text-white" />
+            </div>
+            <p className="font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowDemoBanner(false)}
+            className="text-white hover:bg-blue-500 hover:text-white h-8 px-2"
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
+
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0">
+      <header className={`bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 ${showDemoBanner ? 'mt-12' : ''}`}>
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 emergency-gradient rounded-lg flex items-center justify-center">
@@ -113,10 +134,12 @@ const DemoMode = ({
       </header>
 
       <div className="max-w-6xl mx-auto p-4 space-y-6 flex-1 flex flex-col">
-        {/* Demo Banner */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center flex-shrink-0">
-          <p className="text-blue-800 font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
-        </div>
+        {/* Demo Banner - Only show if persistent banner is dismissed */}
+        {!showDemoBanner && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center flex-shrink-0">
+            <p className="text-blue-800 font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
+          </div>
+        )}
 
         {/* Nearby Responders Card */}
         <div className="grid grid-cols-1 gap-4 flex-shrink-0">
