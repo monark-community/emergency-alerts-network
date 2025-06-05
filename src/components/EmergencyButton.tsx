@@ -26,7 +26,7 @@ const EmergencyButton: React.FC<EmergencyButtonProps> = ({
         `}
       >
         <div className="flex flex-col items-center space-y-2">
-          <AlertTriangle className="w-8 h-8" />
+          <AlertTriangle className="w-12 h-12" />
           <span>{isActive ? 'ALERT SENT' : 'EMERGENCY'}</span>
         </div>
       </Button>
