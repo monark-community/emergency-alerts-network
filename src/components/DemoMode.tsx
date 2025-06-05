@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -42,7 +41,7 @@ const DemoMode = ({
             setShowEmergencyDialog(false);
             toast({
               title: "🚨 Emergency Services Contacted",
-              description: "Police and ambulance have been notified and are on their way.",
+              description: "Police and ambulance have been notified and are on their way. Nearby responders have also been alerted.",
               className: "border-red-500 bg-red-50"
             });
             return 0;
@@ -51,7 +50,7 @@ const DemoMode = ({
         });
       }, 1000);
 
-      // Show responder notification after 3 seconds
+      // Show responder notification after 5 seconds (2 seconds after emergency services)
       const responderTimer = setTimeout(() => {
         toast({
           title: "🚨 Verified Responder On The Way!",
@@ -69,7 +68,7 @@ const DemoMode = ({
             className: "border-green-500 bg-green-50"
           });
         }, 3000);
-      }, 3000);
+      }, 5000);
 
       return () => {
         clearTimeout(responderTimer);
