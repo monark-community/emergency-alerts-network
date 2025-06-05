@@ -51,11 +51,7 @@ const Index = () => {
         },
         (error) => {
           console.error('Error getting location:', error);
-          toast({
-            title: "Location access needed",
-            description: "Please enable location services for emergency features.",
-            variant: "destructive"
-          });
+          // Removed the error toast to provide a better welcome experience
         }
       );
     }
