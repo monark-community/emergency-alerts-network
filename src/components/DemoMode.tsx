@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -94,7 +93,7 @@ const DemoMode = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto">
+    <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto flex flex-col">
       {/* Emergency Services Dialog */}
       {showEmergencyDialog && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -126,7 +125,7 @@ const DemoMode = ({
       )}
 
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 py-3">
+      <header className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 emergency-gradient rounded-lg flex items-center justify-center">
@@ -148,14 +147,14 @@ const DemoMode = ({
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto p-4 space-y-6">
+      <div className="max-w-6xl mx-auto p-4 space-y-6 flex-1 flex flex-col">
         {/* Demo Banner */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center flex-shrink-0">
           <p className="text-blue-800 font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
         </div>
 
         {/* Nearby Responders Card */}
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 flex-shrink-0">
           <Card className="border-blue-200 bg-blue-50">
             <CardContent className="p-4">
               <div className="flex items-center space-x-3">
@@ -170,7 +169,7 @@ const DemoMode = ({
         </div>
 
         {/* Emergency Button Section with Map as Background */}
-        <Card className="border-2 border-emergency-200 relative overflow-hidden">
+        <Card className="border-2 border-emergency-200 relative overflow-hidden flex-1 flex flex-col">
           {/* Map as Background */}
           <div className="absolute inset-0">
             <ResponderMap 
@@ -184,12 +183,12 @@ const DemoMode = ({
           </div>
           
           {/* Content Overlay */}
-          <div className="relative z-10 bg-white/95 backdrop-blur-sm">
-            <CardHeader className="text-center">
+          <div className="relative z-10 bg-white/95 backdrop-blur-sm flex-1 flex flex-col">
+            <CardHeader className="text-center flex-shrink-0">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
               <p className="text-gray-600">Press the button below if you need immediate assistance</p>
             </CardHeader>
-            <CardContent className="flex flex-col items-center space-y-6">
+            <CardContent className="flex flex-col items-center space-y-6 flex-1 justify-center">
               <EmergencyButton 
                 onTrigger={onEmergencyTrigger}
                 isActive={!!activeAlert}
