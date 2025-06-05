@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet } from 'lucide-react';
@@ -36,6 +36,9 @@ const DemoMode = ({
   const [countdown, setCountdown] = useState(10);
   const [showDemoBanner, setShowDemoBanner] = useState(true);
   const [alertSent, setAlertSent] = useState(false);
+  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const emergencyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const responderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Mock wallet data for demo
   const mockWallet = {
@@ -55,6 +58,40 @@ const DemoMode = ({
     console.log('Demo alert sent');
   };
 
+  const clearAllTimeouts = () => {
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+      countdownIntervalRef.current = null;
+    }
+    if (emergencyTimeoutRef.current) {
+      clearTimeout(emergencyTimeoutRef.current);
+      emergencyTimeoutRef.current = null;
+    }
+    if (responderTimeoutRef.current) {
+      clearTimeout(responderTimeoutRef.current);
+      responderTimeoutRef.current = null;
+    }
+  };
+
+  const showResponderNotifications = () => {
+    toast({
+      title: "🚨 Verified Responder On The Way!",
+      description: "Marcus J. is 2 minutes away and heading to your location. Your location has been shared with the verified responder.",
+      className: "border-safe-500 bg-safe-50"
+    });
+    
+    setShowResponderPin(true);
+    
+    // Show responder arrival 5 seconds after responder notification
+    responderTimeoutRef.current = setTimeout(() => {
+      toast({
+        title: "✅ Responder Has Arrived",
+        description: "Marcus J. has arrived at your location and is ready to assist.",
+        className: "border-green-500 bg-green-50"
+      });
+    }, 5000);
+  };
+
   useEffect(() => {
     if (activeAlert && activeAlert.status === 'demo' && alertSent) {
       // Show emergency services dialog immediately after alert is sent
@@ -62,11 +99,13 @@ const DemoMode = ({
       setCountdown(10);
 
       // Start countdown
-      const countdownInterval = setInterval(() => {
+      countdownIntervalRef.current = setInterval(() => {
         setCountdown(prev => {
           if (prev <= 1) {
-            clearInterval(countdownInterval);
+            clearInterval(countdownIntervalRef.current!);
+            countdownIntervalRef.current = null;
             setShowEmergencyDialog(false);
+            
             // Emergency services contacted at T+10 seconds
             toast({
               title: "🚨 Emergency Services Contacted",
@@ -75,23 +114,8 @@ const DemoMode = ({
             });
             
             // Show responder notification 5 seconds after emergency services (T+15 seconds)
-            setTimeout(() => {
-              toast({
-                title: "🚨 Verified Responder On The Way!",
-                description: "Marcus J. is 2 minutes away and heading to your location. Your location has been shared with the verified responder.",
-                className: "border-safe-500 bg-safe-50"
-              });
-              
-              setShowResponderPin(true);
-              
-              // Show responder arrival 5 seconds after responder notification (T+20 seconds)
-              setTimeout(() => {
-                toast({
-                  title: "✅ Responder Has Arrived",
-                  description: "Marcus J. has arrived at your location and is ready to assist.",
-                  className: "border-green-500 bg-green-50"
-                });
-              }, 5000);
+            emergencyTimeoutRef.current = setTimeout(() => {
+              showResponderNotifications();
             }, 5000);
             
             return 0;
@@ -101,19 +125,32 @@ const DemoMode = ({
       }, 1000);
 
       return () => {
-        clearInterval(countdownInterval);
+        clearAllTimeouts();
       };
     }
   }, [activeAlert, alertSent]);
 
   const handleCancelEmergencyServices = () => {
+    clearAllTimeouts();
     setShowEmergencyDialog(false);
+    
     toast({
       title: "Emergency Services Cancelled",
-      description: "Emergency services will not be contacted.",
+      description: "Emergency services will not be contacted. Showing nearby responders instead.",
       className: "border-yellow-500 bg-yellow-50"
     });
+
+    // Show responder notifications immediately (2 seconds after cancel)
+    emergencyTimeoutRef.current = setTimeout(() => {
+      showResponderNotifications();
+    }, 2000);
   };
+
+  useEffect(() => {
+    return () => {
+      clearAllTimeouts();
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto flex flex-col w-full">
