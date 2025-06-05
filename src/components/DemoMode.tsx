@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -78,16 +77,17 @@ const DemoMode = ({
     toast({
       title: (
         <div className="flex items-center space-x-3">
-          <Avatar className="h-8 w-8">
+          <Avatar className="h-8 w-8 flex-shrink-0">
             <AvatarImage 
               src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-              alt="Marcus J." 
+              alt="Marcus J."
+              className="object-cover"
             />
             <AvatarFallback>MJ</AvatarFallback>
           </Avatar>
           <span>🚨 Verified Responder On The Way!</span>
         </div>
-      ),
+      ) as any,
       description: "Marcus J. is 2 minutes away and heading to your location. Your location has been shared with the verified responder.",
       className: "border-safe-500 bg-safe-50"
     });
@@ -99,16 +99,17 @@ const DemoMode = ({
       toast({
         title: (
           <div className="flex items-center space-x-3">
-            <Avatar className="h-8 w-8">
+            <Avatar className="h-8 w-8 flex-shrink-0">
               <AvatarImage 
                 src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                alt="Marcus J." 
+                alt="Marcus J."
+                className="object-cover"
               />
               <AvatarFallback>MJ</AvatarFallback>
             </Avatar>
             <span>✅ Responder Has Arrived</span>
           </div>
-        ),
+        ) as any,
         description: "Marcus J. has arrived at your location and is ready to assist.",
         className: "border-green-500 bg-green-50"
       });
