@@ -116,7 +116,7 @@ const DemoMode = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setShowDemoBanner(false)}
+            onClick={onExit}
             className="text-white hover:bg-blue-500 hover:text-white h-8 px-2"
           >
             <X className="w-4 h-4" />
