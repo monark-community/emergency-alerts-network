@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import EmergencyButton from '@/components/EmergencyButton';
 import ResponderMap from '@/components/ResponderMap';
 import {
@@ -75,7 +76,18 @@ const DemoMode = ({
 
   const showResponderNotifications = () => {
     toast({
-      title: "🚨 Verified Responder On The Way!",
+      title: (
+        <div className="flex items-center space-x-3">
+          <Avatar className="h-8 w-8">
+            <AvatarImage 
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+              alt="Marcus J." 
+            />
+            <AvatarFallback>MJ</AvatarFallback>
+          </Avatar>
+          <span>🚨 Verified Responder On The Way!</span>
+        </div>
+      ),
       description: "Marcus J. is 2 minutes away and heading to your location. Your location has been shared with the verified responder.",
       className: "border-safe-500 bg-safe-50"
     });
@@ -85,7 +97,18 @@ const DemoMode = ({
     // Show responder arrival 5 seconds after responder notification
     responderTimeoutRef.current = setTimeout(() => {
       toast({
-        title: "✅ Responder Has Arrived",
+        title: (
+          <div className="flex items-center space-x-3">
+            <Avatar className="h-8 w-8">
+              <AvatarImage 
+                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                alt="Marcus J." 
+              />
+              <AvatarFallback>MJ</AvatarFallback>
+            </Avatar>
+            <span>✅ Responder Has Arrived</span>
+          </div>
+        ),
         description: "Marcus J. has arrived at your location and is ready to assist.",
         className: "border-green-500 bg-green-50"
       });
