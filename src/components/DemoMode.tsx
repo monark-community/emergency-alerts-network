@@ -275,7 +275,8 @@ const DemoMode = ({
                     />
                   )}
                   
-                  {activeAlert && (
+                  {/* Only show Demo Alert Active card if alert has been sent */}
+                  {activeAlert && alertSent && (
                     <div className="animate-fade-in w-full max-w-md">
                       <Card className="border-blue-300 bg-blue-50">
                         <CardContent className="p-4">
