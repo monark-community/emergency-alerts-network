@@ -11,7 +11,7 @@ interface ReputationDisplayProps {
 const ReputationDisplay: React.FC<ReputationDisplayProps> = ({ reputation }) => {
   const getReputationLevel = (score: number) => {
     if (score >= 90) return { level: 'Guardian Elite', color: 'text-yellow-600', bg: 'bg-yellow-100' };
-    if (score >= 75) return { level: 'Trusted Responder', color: 'text-blue-600', bg: 'bg-blue-100' };
+    if (score >= 75) return { level: 'Trusted Responder', color: 'text-yellow-700', bg: 'bg-yellow-100' };
     if (score >= 50) return { level: 'Community Helper', color: 'text-green-600', bg: 'bg-green-100' };
     return { level: 'New Guardian', color: 'text-gray-600', bg: 'bg-gray-100' };
   };
