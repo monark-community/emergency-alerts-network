@@ -62,12 +62,9 @@ const Index = () => {
   }, []);
 
   const handleSendAlert = () => {
-    if (!isDemoMode && !isConnected) {
-      toast({
-        title: "Connect wallet first",
-        description: "You need to connect your wallet to send alerts.",
-        variant: "destructive"
-      });
+    if (!isConnected) {
+      // Launch demo mode instead of showing error
+      handleTryDemo();
       return;
     }
 
@@ -243,7 +240,7 @@ const Index = () => {
                 <EmergencyButton 
                   onTrigger={handleSendAlert}
                   isActive={false}
-                  disabled={!isConnected || !userLocation}
+                  disabled={false}
                   showSendAlert={true}
                 />
               ) : (
@@ -275,9 +272,9 @@ const Index = () => {
               )}
               
               {!isConnected && (
-                <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <Wallet className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
-                  <p className="text-yellow-800 font-medium">Connect your wallet to enable emergency features</p>
+                <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <Shield className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <p className="text-blue-800 font-medium">Try the demo above or connect your wallet for full features</p>
                 </div>
               )}
             </CardContent>
