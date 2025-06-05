@@ -1,10 +1,18 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, MapPin, Shield, Users, X, Phone } from 'lucide-react';
+import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import EmergencyButton from '@/components/EmergencyButton';
 import ResponderMap from '@/components/ResponderMap';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface DemoModeProps {
   onExit: () => void;
@@ -28,6 +36,12 @@ const DemoMode = ({
   const [countdown, setCountdown] = useState(10);
   const [showDemoBanner, setShowDemoBanner] = useState(true);
 
+  // Mock wallet data for demo
+  const mockWallet = {
+    username: "Alex_Guardian",
+    address: "0x742d35Cc6634C0532925a3b8D9c6C05Ae5c74324"
+  };
+
   useEffect(() => {
     if (activeAlert && activeAlert.status === 'demo') {
       // Show emergency services dialog immediately
@@ -43,7 +57,7 @@ const DemoMode = ({
             // Emergency services contacted at T+10 seconds
             toast({
               title: "🚨 Emergency Services Contacted",
-              description: "Police and ambulance have been notified and are on their way. Nearby responders have also been alerted.",
+              description: "Police and ambulance have been notified and are on their way. Your location has been shared with emergency services. Nearby responders have also been alerted.",
               className: "border-red-500 bg-red-50"
             });
             
@@ -51,7 +65,7 @@ const DemoMode = ({
             setTimeout(() => {
               toast({
                 title: "🚨 Verified Responder On The Way!",
-                description: "Marcus J. is 2 minutes away and heading to your location.",
+                description: "Marcus J. is 2 minutes away and heading to your location. Your location has been shared with the verified responder.",
                 className: "border-safe-500 bg-safe-50"
               });
               
@@ -89,7 +103,7 @@ const DemoMode = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto flex flex-col">
+    <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto flex flex-col w-full">
       {/* Persistent Demo Banner */}
       {showDemoBanner && (
         <div className="fixed top-0 left-0 right-0 bg-blue-600 text-white px-4 py-3 flex items-center justify-between z-[60] shadow-lg">
@@ -111,8 +125,8 @@ const DemoMode = ({
       )}
 
       {/* Header */}
-      <header className={`bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 ${showDemoBanner ? 'mt-12' : ''}`}>
-        <div className="flex items-center justify-between max-w-6xl mx-auto">
+      <header className={`bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 w-full ${showDemoBanner ? 'mt-12' : ''}`}>
+        <div className="flex items-center justify-between w-full max-w-none mx-auto">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 emergency-gradient rounded-lg flex items-center justify-center">
               <Shield className="w-6 h-6 text-white" />
@@ -122,18 +136,40 @@ const DemoMode = ({
               <p className="text-sm text-gray-600">Community Emergency Response - Demo Mode</p>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onExit}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <X className="w-5 h-5" />
-          </Button>
+          
+          {/* User Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-blue-600" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-gray-900">{mockWallet.username}</p>
+                  <p className="text-xs text-gray-500">{mockWallet.address.slice(0, 6)}...{mockWallet.address.slice(-4)}</p>
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem>
+                <User className="w-4 h-4 mr-2" />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Wallet className="w-4 h-4 mr-2" />
+                Wallet Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onExit}>
+                <X className="w-4 h-4 mr-2" />
+                Exit Demo
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto p-4 space-y-6 flex-1 flex flex-col">
+      <div className="w-full p-4 space-y-6 flex-1 flex flex-col">
         {/* Demo Banner - Only show if persistent banner is dismissed */}
         {!showDemoBanner && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center flex-shrink-0">
