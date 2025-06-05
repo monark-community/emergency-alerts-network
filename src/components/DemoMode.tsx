@@ -35,6 +35,7 @@ const DemoMode = ({
   const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [showDemoBanner, setShowDemoBanner] = useState(true);
+  const [alertSent, setAlertSent] = useState(false);
 
   // Mock wallet data for demo
   const mockWallet = {
@@ -42,9 +43,21 @@ const DemoMode = ({
     address: "0x742d35Cc6634C0532925a3b8D9c6C05Ae5c74324"
   };
 
+  const handleSendAlert = () => {
+    setAlertSent(true);
+    
+    toast({
+      title: "Alert sent! 🚨",
+      description: "Your emergency alert has been sent. Emergency services will be contacted shortly.",
+      className: "border-emergency-500"
+    });
+
+    console.log('Demo alert sent');
+  };
+
   useEffect(() => {
-    if (activeAlert && activeAlert.status === 'demo') {
-      // Show emergency services dialog immediately
+    if (activeAlert && activeAlert.status === 'demo' && alertSent) {
+      // Show emergency services dialog immediately after alert is sent
       setShowEmergencyDialog(true);
       setCountdown(10);
 
@@ -91,7 +104,7 @@ const DemoMode = ({
         clearInterval(countdownInterval);
       };
     }
-  }, [activeAlert]);
+  }, [activeAlert, alertSent]);
 
   const handleCancelEmergencyServices = () => {
     setShowEmergencyDialog(false);
@@ -210,7 +223,9 @@ const DemoMode = ({
           <div className="relative z-10 bg-white/95 backdrop-blur-sm flex-1 flex flex-col">
             <CardHeader className="text-center flex-shrink-0">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
-              <p className="text-gray-600">Press the button below if you need immediate assistance</p>
+              <p className="text-gray-600">
+                {!alertSent ? "Press the button below if you need immediate assistance" : "Emergency services will be contacted automatically"}
+              </p>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-6 flex-1 justify-center">
               {/* Emergency Services Dialog - Integrated into card */}
@@ -245,11 +260,20 @@ const DemoMode = ({
 
               {!showEmergencyDialog && (
                 <>
-                  <EmergencyButton 
-                    onTrigger={onEmergencyTrigger}
-                    isActive={!!activeAlert}
-                    disabled={false}
-                  />
+                  {!alertSent ? (
+                    <EmergencyButton 
+                      onTrigger={handleSendAlert}
+                      isActive={false}
+                      disabled={false}
+                      showSendAlert={true}
+                    />
+                  ) : (
+                    <EmergencyButton 
+                      onTrigger={onEmergencyTrigger}
+                      isActive={!!activeAlert}
+                      disabled={false}
+                    />
+                  )}
                   
                   {activeAlert && (
                     <div className="animate-fade-in w-full max-w-md">
