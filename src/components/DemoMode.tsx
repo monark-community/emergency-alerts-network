@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, MapPin, Shield, Users, X } from 'lucide-react';
+import { AlertCircle, MapPin, Shield, Users, X, Phone } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import EmergencyButton from '@/components/EmergencyButton';
 import ResponderMap from '@/components/ResponderMap';
@@ -26,33 +26,105 @@ const DemoMode = ({
 }: DemoModeProps) => {
   const [showExitButton, setShowExitButton] = useState(false);
   const [showResponderPin, setShowResponderPin] = useState(false);
+  const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
+  const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
-    // Show exit button after responder notification + 3 seconds
     if (activeAlert && activeAlert.status === 'demo') {
-      const timer = setTimeout(() => {
-        // First show the responder notification
+      // Show emergency services dialog immediately
+      setShowEmergencyDialog(true);
+      setCountdown(10);
+
+      // Start countdown
+      const countdownInterval = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            setShowEmergencyDialog(false);
+            toast({
+              title: "🚨 Emergency Services Contacted",
+              description: "Police and ambulance have been notified and are on their way.",
+              className: "border-red-500 bg-red-50"
+            });
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      // Show responder notification after 3 seconds
+      const responderTimer = setTimeout(() => {
         toast({
           title: "🚨 Verified Responder On The Way!",
           description: "Marcus J. is 2 minutes away and heading to your location.",
           className: "border-safe-500 bg-safe-50"
         });
         
-        // Show the responder pin on the map
         setShowResponderPin(true);
         
-        // Then show exit button after 3 more seconds
+        // Show responder arrival after another 3 seconds
         setTimeout(() => {
-          setShowExitButton(true);
+          toast({
+            title: "✅ Responder Has Arrived",
+            description: "Marcus J. has arrived at your location and is ready to assist.",
+            className: "border-green-500 bg-green-50"
+          });
+          
+          // Show exit button after responder arrival
+          setTimeout(() => {
+            setShowExitButton(true);
+          }, 2000);
         }, 3000);
       }, 3000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(responderTimer);
+        clearInterval(countdownInterval);
+      };
     }
   }, [activeAlert]);
 
+  const handleCancelEmergencyServices = () => {
+    setShowEmergencyDialog(false);
+    toast({
+      title: "Emergency Services Cancelled",
+      description: "Emergency services will not be contacted.",
+      className: "border-yellow-500 bg-yellow-50"
+    });
+  };
+
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto">
+      {/* Emergency Services Dialog */}
+      {showEmergencyDialog && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <Card className="max-w-md w-full border-red-300 bg-red-50">
+            <CardHeader className="text-center">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <Phone className="w-8 h-8 text-red-600" />
+                <AlertCircle className="w-8 h-8 text-red-600 animate-pulse" />
+              </div>
+              <CardTitle className="text-red-800">Contact Emergency Services?</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center space-y-4">
+              <p className="text-red-700">
+                Emergency services will be contacted automatically in:
+              </p>
+              <div className="text-4xl font-bold text-red-600">
+                {countdown}
+              </div>
+              <Button 
+                onClick={handleCancelEmergencyServices}
+                variant="outline"
+                className="border-red-300 text-red-700 hover:bg-red-100"
+              >
+                Cancel - Don't Contact Emergency Services
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 py-3">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
