@@ -97,24 +97,22 @@ const DemoMode = ({
           </Card>
         </div>
 
-        {/* Emergency Button with Map Behind */}
-        <div className="relative">
-          {/* Map Section - Behind the button */}
-          <Card className="absolute inset-0 z-0">
-            <CardContent className="p-6 h-full">
-              <ResponderMap 
-                userLocation={userLocation}
-                responders={showResponderPin ? nearbyResponders.map((responder, index) => 
-                  index === 0 ? { ...responder, responding: true } : responder
-                ) : []}
-                activeAlert={activeAlert}
-                onRespondToAlert={() => {}}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Emergency Button Section - Overlaid on top */}
-          <Card className="relative z-10 border-2 border-emergency-200 bg-white/95 backdrop-blur-sm">
+        {/* Emergency Button Section with Map as Background */}
+        <Card className="border-2 border-emergency-200 relative overflow-hidden">
+          {/* Map as Background */}
+          <div className="absolute inset-0">
+            <ResponderMap 
+              userLocation={userLocation}
+              responders={showResponderPin ? nearbyResponders.map((responder, index) => 
+                index === 0 ? { ...responder, responding: true } : responder
+              ) : []}
+              activeAlert={activeAlert}
+              onRespondToAlert={() => {}}
+            />
+          </div>
+          
+          {/* Content Overlay */}
+          <div className="relative z-10 bg-white/95 backdrop-blur-sm">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
               <p className="text-gray-600">Press the button below if you need immediate assistance</p>
@@ -155,8 +153,8 @@ const DemoMode = ({
                 </div>
               )}
             </CardContent>
-          </Card>
-        </div>
+          </div>
+        </Card>
       </div>
     </div>
   );
