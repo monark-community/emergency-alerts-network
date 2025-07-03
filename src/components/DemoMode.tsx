@@ -47,6 +47,7 @@ const DemoMode = ({
   const [alertSent, setAlertSent] = useState(false);
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([]);
   const [emergencyServicesCancelled, setEmergencyServicesCancelled] = useState(false);
+  const emergencyServicesCancelledRef = useRef(false);
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const emergencyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const responderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -111,10 +112,10 @@ const DemoMode = ({
         avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
       });
       
-      // Show first responder arrival only if emergency services weren't cancelled
+      // Only show first responder arrival if emergency services weren't cancelled
       setTimeout(() => {
-        // Check cancellation state when timeout executes, not when it's set
-        if (!emergencyServicesCancelled) {
+        // Use ref to avoid stale closure
+        if (!emergencyServicesCancelledRef.current) {
           addTimelineEvent({
             type: 'emergency',
             title: '🚑 Local First Responder Arrival',
@@ -169,6 +170,7 @@ const DemoMode = ({
     clearAllTimeouts();
     setShowEmergencyDialog(false);
     setEmergencyServicesCancelled(true);
+    emergencyServicesCancelledRef.current = true; // Update ref too
     
     addTimelineEvent({
       type: 'alert',
