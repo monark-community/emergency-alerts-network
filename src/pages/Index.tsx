@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, MapPin, Shield, Users, Wallet, CheckCircle } from 'lucide-react';
+import { AlertCircle, MapPin, Shield, Users, Wallet, CheckCircle, Play } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import EmergencyButton from '@/components/EmergencyButton';
 import WalletConnection from '@/components/WalletConnection';
@@ -177,17 +177,17 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen modern-gradient">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 py-3">
+      <header className="bg-white/90 backdrop-blur-md border-b border-gray-200/50 px-4 py-3 sticky top-0 z-40">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 emergency-gradient rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 emergency-gradient rounded-xl flex items-center justify-center shadow-lg">
               <Shield className="w-6 h-6 text-white" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">Guardian</h1>
-              <p className="text-sm text-gray-600">Community Emergency Response</p>
+              <p className="text-sm text-gray-600">Emergency Response Network</p>
             </div>
           </div>
           <WalletConnection isConnected={isConnected} onConnect={setIsConnected} />
@@ -206,13 +206,13 @@ const Index = () => {
         {/* Status Cards - Only show for connected users */}
         {isConnected && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card className="border-safe-200 bg-safe-50">
-              <CardContent className="p-4">
+            <Card className="glass-effect border-0 shadow-lg">
+              <CardContent className="p-6">
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-8 h-8 text-safe-600" />
+                  <CheckCircle className="w-8 h-8 text-emerald-600" />
                   <div>
-                    <p className="text-sm font-medium text-safe-800">Status</p>
-                    <p className="text-lg font-bold text-safe-600">Safe</p>
+                    <p className="text-sm font-medium text-gray-700">Status</p>
+                    <p className="text-xl font-bold text-emerald-600">Safe</p>
                   </div>
                 </div>
               </CardContent>
@@ -224,14 +224,14 @@ const Index = () => {
 
         {/* Emergency Button Section */}
         <div ref={emergencyRef}>
-          <Card className="border-2 border-emergency-200">
-            <CardHeader className="text-center">
+          <Card className="glass-effect border-0 shadow-xl">
+            <CardHeader className="text-center pb-4">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
               <p className="text-gray-600">
                 {!alertSent ? "Press the button below if you need immediate assistance" : "Emergency services will be contacted automatically"}
               </p>
             </CardHeader>
-            <CardContent className="flex flex-col items-center space-y-6">
+            <CardContent className="flex flex-col items-center space-y-6 pb-8">
               {!alertSent ? (
                 <EmergencyButton 
                   onTrigger={handleSendAlert}
@@ -249,15 +249,15 @@ const Index = () => {
               
               {activeAlert && (
                 <div className="animate-fade-in w-full max-w-md">
-                  <Card className={`border-emergency-300 ${activeAlert.status === 'demo' ? 'bg-blue-50' : 'bg-emergency-50'}`}>
+                  <Card className={`glass-effect border-0 shadow-lg ${activeAlert.status === 'demo' ? 'bg-blue-50/80' : 'bg-red-50/80'}`}>
                     <CardContent className="p-4">
                       <div className="flex items-center space-x-3">
-                        <AlertCircle className={`w-6 h-6 ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600 animate-pulse-emergency'}`} />
+                        <AlertCircle className={`w-6 h-6 ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-red-600 animate-pulse-emergency'}`} />
                         <div>
-                          <p className={`font-semibold ${activeAlert.status === 'demo' ? 'text-blue-800' : 'text-emergency-800'}`}>
+                          <p className={`font-semibold ${activeAlert.status === 'demo' ? 'text-blue-800' : 'text-red-800'}`}>
                             {activeAlert.status === 'demo' ? 'Demo Alert Active' : 'Active Emergency Alert'}
                           </p>
-                          <p className={`text-sm ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-emergency-600'}`}>
+                          <p className={`text-sm ${activeAlert.status === 'demo' ? 'text-blue-600' : 'text-red-600'}`}>
                             {activeAlert.status === 'demo' ? 'Demo started at' : 'Sent at'} {activeAlert.timestamp.toLocaleTimeString()}
                           </p>
                         </div>
@@ -268,9 +268,17 @@ const Index = () => {
               )}
               
               {!isConnected && (
-                <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <Shield className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                  <p className="text-blue-800 font-medium">Try the demo above or connect your wallet for full features</p>
+                <div className="text-center p-6 glass-effect rounded-xl border-0 shadow-lg">
+                  <Shield className="w-8 h-8 text-blue-600 mx-auto mb-3" />
+                  <p className="text-gray-800 font-medium mb-3">Try the demo above or connect your wallet for full features</p>
+                  <Button 
+                    onClick={handleTryDemo}
+                    variant="outline" 
+                    className="bg-white/80 border-blue-200 text-blue-700 hover:bg-blue-50"
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    Try Interactive Demo
+                  </Button>
                 </div>
               )}
             </CardContent>

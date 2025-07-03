@@ -12,22 +12,22 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onConnectWallet, onTryDemo }: HeroSectionProps) => {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-emergency-50 via-white to-safe-50 border-b border-gray-200">
-      <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="relative overflow-hidden modern-gradient border-b border-gray-200/50">
+      <div className="max-w-6xl mx-auto px-4 py-16">
         {/* Main Hero Content */}
         <div className="text-center space-y-8">
           {/* Badge */}
-          <Badge variant="outline" className="mx-auto bg-white border-emergency-200 text-emergency-700">
+          <Badge variant="outline" className="mx-auto glass-effect border-0 text-gray-700 shadow-lg">
             🚨 Decentralized Emergency Response Network
           </Badge>
           
           {/* Hero Title */}
-          <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
+          <div className="space-y-6">
+            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
               Help is just 
-              <span className="text-emergency-600"> seconds away</span>
+              <span className="emergency-gradient bg-clip-text text-transparent"> seconds away</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Connect with nearby responders instantly. Earn rewards for helping others. 
               Build safer communities through decentralized emergency response.
             </p>
@@ -36,74 +36,74 @@ const HeroSection = ({ onConnectWallet, onTryDemo }: HeroSectionProps) => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
-              onClick={onConnectWallet}
-              size="lg" 
-              className="emergency-gradient text-white font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              Connect Wallet & Join Network
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <Button 
               onClick={onTryDemo}
-              variant="outline" 
               size="lg" 
-              className="border-gray-300 text-gray-700 font-semibold px-8 py-3 text-lg hover:bg-gray-50"
+              className="emergency-gradient text-white font-semibold px-10 py-4 text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
             >
               <Play className="w-5 h-5 mr-2" />
               Try Interactive Demo
             </Button>
+            <Button 
+              onClick={onConnectWallet}
+              variant="outline" 
+              size="lg" 
+              className="glass-effect border-0 text-gray-700 font-semibold px-10 py-4 text-lg hover:bg-white/90 shadow-lg"
+            >
+              Connect Wallet & Join
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
           </div>
 
           {/* Key Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
             <div className="text-center">
-              <div className="text-3xl font-bold text-emergency-600">2.3s</div>
-              <div className="text-sm text-gray-600">Avg Response Time</div>
+              <div className="text-4xl font-bold emergency-gradient bg-clip-text text-transparent">2.3s</div>
+              <div className="text-sm text-gray-600 mt-2">Avg Response Time</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-safe-600">94%</div>
-              <div className="text-sm text-gray-600">Help Success Rate</div>
+              <div className="text-4xl font-bold text-emerald-600">94%</div>
+              <div className="text-sm text-gray-600 mt-2">Help Success Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">1,247</div>
-              <div className="text-sm text-gray-600">Active Responders</div>
+              <div className="text-4xl font-bold text-gray-900">1,247</div>
+              <div className="text-sm text-gray-600 mt-2">Active Responders</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-warning-600">$12K</div>
-              <div className="text-sm text-gray-600">Rewards Distributed</div>
+              <div className="text-4xl font-bold text-gray-900">$12K</div>
+              <div className="text-sm text-gray-600 mt-2">Rewards Distributed</div>
             </div>
           </div>
         </div>
 
         {/* Feature Highlights */}
-        <div className="grid md:grid-cols-3 gap-6 mt-16">
-          <Card className="border-safe-200 bg-safe-50 hover:shadow-lg transition-shadow">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 safe-gradient rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-6 h-6 text-white" />
+        <div className="grid md:grid-cols-3 gap-8 mt-20">
+          <Card className="glass-effect border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 emergency-gradient rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Shield className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Instant Safety Network</h3>
-              <p className="text-sm text-gray-600">Alert nearby verified responders with one tap. Help is always within reach.</p>
+              <h3 className="font-bold text-gray-900 mb-3 text-lg">Instant Safety Network</h3>
+              <p className="text-gray-600">Alert nearby verified responders with one tap. Help is always within reach.</p>
             </CardContent>
           </Card>
 
-          <Card className="border-blue-200 bg-blue-50 hover:shadow-lg transition-shadow">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-6 h-6 text-white" />
+          <Card className="glass-effect border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Users className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Earn by Helping</h3>
-              <p className="text-sm text-gray-600">Get rewarded for responding to alerts and building community trust.</p>
+              <h3 className="font-bold text-gray-900 mb-3 text-lg">Earn by Helping</h3>
+              <p className="text-gray-600">Get rewarded for responding to alerts and building community trust.</p>
             </CardContent>
           </Card>
 
-          <Card className="border-warning-200 bg-warning-50 hover:shadow-lg transition-shadow">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-warning-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-6 h-6 text-white" />
+          <Card className="glass-effect border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+            <CardContent className="p-8 text-center">
+              <div className="w-16 h-16 bg-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Award className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Build Reputation</h3>
-              <p className="text-sm text-gray-600">Increase your trust score and unlock premium response opportunities.</p>
+              <h3 className="font-bold text-gray-900 mb-3 text-lg">Build Reputation</h3>
+              <p className="text-gray-600">Increase your trust score and unlock premium response opportunities.</p>
             </CardContent>
           </Card>
         </div>

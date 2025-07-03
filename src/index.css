@@ -97,11 +97,15 @@
 
 @layer utilities {
   .emergency-gradient {
-    background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, #f97316 100%);
   }
   
   .safe-gradient {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  }
+  
+  .modern-gradient {
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
   }
   
   .map-container {
@@ -114,8 +118,8 @@
   }
   
   .glass-effect {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
 }

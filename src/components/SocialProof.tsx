@@ -46,30 +46,30 @@ const SocialProof = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16 space-y-16">
+    <div className="max-w-6xl mx-auto px-4 py-20 space-y-20">
       {/* Community Stats */}
-      <div className="text-center space-y-8">
-        <div className="space-y-4">
-          <Badge variant="outline" className="bg-safe-50 border-safe-200 text-safe-700">
+      <div className="text-center space-y-12">
+        <div className="space-y-6">
+          <Badge variant="outline" className="glass-effect border-0 text-gray-700 shadow-lg">
             📊 Community Impact
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
             Real impact, real results
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             See how Guardian is making communities safer, one response at a time.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
-            <Card key={index} className="border-gray-200 hover:shadow-lg transition-shadow">
-              <CardContent className="p-6 text-center">
-                <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+            <Card key={index} className="glass-effect border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+              <CardContent className="p-8 text-center">
+                <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                   {stat.value}
                 </div>
-                <div className="text-sm text-gray-600 mb-2">{stat.label}</div>
-                <Badge variant="outline" className="text-xs bg-safe-50 border-safe-200 text-safe-700">
+                <div className="text-sm text-gray-600 mb-3">{stat.label}</div>
+                <Badge variant="outline" className="text-xs glass-effect border-0 text-emerald-700 shadow-sm">
                   {stat.trend}
                 </Badge>
               </CardContent>
@@ -79,19 +79,19 @@ const SocialProof = () => {
       </div>
 
       {/* Testimonials */}
-      <div className="space-y-8">
-        <div className="text-center space-y-4">
-          <Badge variant="outline" className="bg-blue-50 border-blue-200 text-blue-700">
+      <div className="space-y-12">
+        <div className="text-center space-y-6">
+          <Badge variant="outline" className="glass-effect border-0 text-gray-700 shadow-lg">
             💬 Community Stories
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
             Trusted by people like you
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="border-gray-200 hover:shadow-lg transition-shadow relative">
+            <Card key={testimonial.id} className="glass-effect border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105 relative">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-3">
@@ -120,7 +120,7 @@ const SocialProof = () => {
                   "{testimonial.text}"
                 </p>
                 <div className="flex items-center justify-between text-xs">
-                  <Badge variant="outline" className="bg-safe-50 border-safe-200 text-safe-700">
+                  <Badge variant="outline" className="glass-effect border-0 text-emerald-700 shadow-sm">
                     Earned {testimonial.earned}
                   </Badge>
                   <div className="text-gray-500">
