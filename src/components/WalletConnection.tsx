@@ -2,8 +2,16 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wallet, CheckCircle } from 'lucide-react';
+import { Wallet, CheckCircle, User, X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface WalletConnectionProps {
   isConnected: boolean;
@@ -11,6 +19,12 @@ interface WalletConnectionProps {
 }
 
 const WalletConnection: React.FC<WalletConnectionProps> = ({ isConnected, onConnect }) => {
+  // Mock wallet data - in real app this would come from wallet connection
+  const mockWallet = {
+    username: "Alex_Guardian",
+    address: "0x742d35Cc6634C0532925a3b8D9c6C05Ae5c74324"
+  };
+
   const handleConnect = async () => {
     // Simulate wallet connection
     try {
@@ -42,20 +56,34 @@ const WalletConnection: React.FC<WalletConnectionProps> = ({ isConnected, onConn
 
   if (isConnected) {
     return (
-      <div className="flex items-center space-x-3">
-        <Badge variant="secondary" className="bg-safe-100 text-safe-800 border-safe-300">
-          <CheckCircle className="w-4 h-4 mr-1" />
-          Connected
-        </Badge>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={handleDisconnect}
-          className="text-gray-600"
-        >
-          Disconnect
-        </Button>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-blue-600" />
+            </div>
+            <div className="text-left">
+              <p className="text-sm font-medium text-gray-900">{mockWallet.username}</p>
+              <p className="text-xs text-gray-500">{mockWallet.address.slice(0, 6)}...{mockWallet.address.slice(-4)}</p>
+            </div>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuItem>
+            <User className="w-4 h-4 mr-2" />
+            Profile
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Wallet className="w-4 h-4 mr-2" />
+            Wallet Settings
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleDisconnect}>
+            <X className="w-4 h-4 mr-2" />
+            Disconnect
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   }
 
