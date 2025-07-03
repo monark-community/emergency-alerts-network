@@ -25,7 +25,7 @@ const HeroSection = ({ onConnectWallet, onTryDemo }: HeroSectionProps) => {
           <div className="space-y-6">
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
               Help is just 
-              <span className="emergency-gradient bg-clip-text text-transparent"> seconds away</span>
+              <span className="emergency-text-gradient"> seconds away</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Connect with nearby responders instantly. Earn rewards for helping others. 
@@ -57,7 +57,7 @@ const HeroSection = ({ onConnectWallet, onTryDemo }: HeroSectionProps) => {
           {/* Key Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
             <div className="text-center">
-              <div className="text-4xl font-bold emergency-gradient bg-clip-text text-transparent">2.3s</div>
+              <div className="text-4xl font-bold emergency-text-gradient">2.3s</div>
               <div className="text-sm text-gray-600 mt-2">Avg Response Time</div>
             </div>
             <div className="text-center">
