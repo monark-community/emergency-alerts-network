@@ -65,7 +65,7 @@ const DemoMode = ({
 
   // Security question for demo
   const securityQuestion = "What is your mother's maiden name?";
-  const correctAnswer = "Johnson"; // Demo answer
+  const correctAnswer = "Beth"; // Demo answer
 
   // Mock wallet data for demo
   const mockWallet = {
@@ -494,13 +494,14 @@ const DemoMode = ({
           <DialogHeader>
             <DialogTitle className="text-red-800">Cancel Emergency Alert</DialogTitle>
             <DialogDescription>
-              To cancel this emergency alert, please answer the security question to verify your identity.
+              We would love to know you're safe, to cancel the alert, please answer your security question.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
               <p className="text-sm font-medium text-gray-700 mb-2">Security Question:</p>
               <p className="text-gray-900">{securityQuestion}</p>
+              <p className="text-xs text-gray-500 mt-1 italic">Demo hint: Try typing 'Beth'</p>
             </div>
             <div>
               <Input
