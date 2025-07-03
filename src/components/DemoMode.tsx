@@ -178,18 +178,15 @@ const DemoMode = ({
     <div className="fixed inset-0 modern-gradient z-50 overflow-auto flex flex-col w-full">
       {/* Persistent Demo Banner */}
       {showDemoBanner && (
-        <div className="fixed top-0 left-0 right-0 glass-effect bg-blue-600/90 text-white px-4 py-3 flex items-center justify-between z-[60] shadow-xl backdrop-blur-md">
+        <div className="fixed top-0 left-0 right-0 bg-gray-900 text-white px-4 py-3 flex items-center justify-between z-[60] shadow-xl">
           <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 bg-blue-500/80 rounded-full flex items-center justify-center">
-              <Play className="w-4 h-4 text-white" />
-            </div>
             <p className="font-medium">🎮 Demo Mode Active - Experience the Guardian emergency response system</p>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={onExit}
-            className="text-white hover:bg-blue-500/50 hover:text-white h-8 px-2"
+            className="text-white hover:bg-gray-800 hover:text-white h-8 px-2"
           >
             <X className="w-4 h-4" />
           </Button>
