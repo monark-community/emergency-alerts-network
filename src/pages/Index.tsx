@@ -64,20 +64,14 @@ const Index = () => {
       return;
     }
 
-    if (!userLocation) {
-      toast({
-        title: "Location required",
-        description: "Location access is needed to send emergency alerts.",
-        variant: "destructive"
-      });
-      return;
-    }
+    // Use fictitious location for demo purposes
+    const demoLocation = userLocation || { lat: 40.7128, lng: -74.0060 }; // NYC coordinates as fallback
 
     setAlertSent(true);
     
     toast({
       title: "Alert sent! 🚨",
-      description: "Your emergency alert has been sent. Emergency services will be contacted shortly.",
+      description: "Your emergency alert has been sent. Local first responders will be contacted shortly.",
       className: "border-emergency-500"
     });
 
@@ -85,9 +79,12 @@ const Index = () => {
   };
 
   const handleEmergencyTrigger = async () => {
+    // Use fictitious location for demo purposes
+    const demoLocation = userLocation || { lat: 40.7128, lng: -74.0060 }; // NYC coordinates as fallback
+    
     const newAlert = {
       id: Date.now(),
-      location: userLocation,
+      location: demoLocation,
       timestamp: new Date(),
       status: isDemoMode ? 'demo' : 'active',
       type: 'emergency'
