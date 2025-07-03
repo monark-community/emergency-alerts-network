@@ -19,23 +19,23 @@ const ReputationDisplay: React.FC<ReputationDisplayProps> = ({ reputation }) => 
   const reputationInfo = getReputationLevel(reputation);
 
   return (
-    <Card className="border-yellow-200 bg-yellow-50">
-      <CardContent className="p-4">
+    <Card className="glass-effect border-0 shadow-lg">
+      <CardContent className="p-6">
         <div className="flex items-center space-x-3">
           <Star className="w-8 h-8 text-yellow-600" />
           <div>
-            <p className="text-sm font-medium text-yellow-800">Reputation Score</p>
+            <p className="text-sm font-medium text-gray-700">Reputation Score</p>
             <div className="flex items-center space-x-2">
-              <p className="text-lg font-bold text-yellow-600">{reputation}</p>
-              <Badge className={`${reputationInfo.bg} ${reputationInfo.color} border-0`}>
+              <p className="text-xl font-bold text-gray-900">{reputation}</p>
+              <Badge className={`glass-effect border-0 shadow-sm ${reputationInfo.color}`}>
                 {reputationInfo.level}
               </Badge>
             </div>
           </div>
         </div>
-        <div className="mt-2 w-full bg-yellow-200 rounded-full h-2">
+        <div className="mt-4 w-full bg-gray-200/50 rounded-full h-2">
           <div 
-            className="bg-yellow-600 h-2 rounded-full transition-all duration-300"
+            className="emergency-gradient h-2 rounded-full transition-all duration-300"
             style={{ width: `${reputation}%` }}
           ></div>
         </div>

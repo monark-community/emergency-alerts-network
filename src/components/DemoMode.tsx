@@ -175,12 +175,12 @@ const DemoMode = ({
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100 z-50 overflow-auto flex flex-col w-full">
+    <div className="fixed inset-0 modern-gradient z-50 overflow-auto flex flex-col w-full">
       {/* Persistent Demo Banner */}
       {showDemoBanner && (
-        <div className="fixed top-0 left-0 right-0 bg-blue-600 text-white px-4 py-3 flex items-center justify-between z-[60] shadow-lg">
+        <div className="fixed top-0 left-0 right-0 glass-effect bg-blue-600/90 text-white px-4 py-3 flex items-center justify-between z-[60] shadow-xl backdrop-blur-md">
           <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 bg-blue-500/80 rounded-full flex items-center justify-center">
               <Shield className="w-4 h-4 text-white" />
             </div>
             <p className="font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
@@ -189,7 +189,7 @@ const DemoMode = ({
             variant="ghost"
             size="sm"
             onClick={onExit}
-            className="text-white hover:bg-blue-500 hover:text-white h-8 px-2"
+            className="text-white hover:bg-blue-500/50 hover:text-white h-8 px-2"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -197,24 +197,24 @@ const DemoMode = ({
       )}
 
       {/* Header */}
-      <header className={`bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 w-full ${showDemoBanner ? 'mt-12' : ''}`}>
+      <header className={`glass-effect bg-white/90 backdrop-blur-md border-b border-gray-200/50 px-4 py-3 flex-shrink-0 w-full sticky top-0 z-40 ${showDemoBanner ? 'mt-12' : ''}`}>
         <div className="flex items-center justify-between w-full max-w-none mx-auto">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 emergency-gradient rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 emergency-gradient rounded-xl flex items-center justify-center shadow-lg">
               <Shield className="w-6 h-6 text-white" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">Guardian</h1>
-              <p className="text-sm text-gray-600">Community Emergency Response - Demo Mode</p>
+              <p className="text-sm text-gray-600">Emergency Response Network - Demo Mode</p>
             </div>
           </div>
           
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-blue-600" />
+              <Button variant="ghost" size="sm" className="flex items-center space-x-2 hover:bg-white/50">
+                <div className="w-8 h-8 glass-effect rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-gray-700" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-medium text-gray-900">{mockWallet.username}</p>
@@ -222,7 +222,7 @@ const DemoMode = ({
                 </div>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56 glass-effect bg-white/95 backdrop-blur-md border-0 shadow-xl">
               <DropdownMenuItem>
                 <User className="w-4 h-4 mr-2" />
                 Profile
@@ -244,20 +244,20 @@ const DemoMode = ({
       <div className="w-full p-4 space-y-6 flex-1 flex flex-col">
         {/* Demo Banner - Only show if persistent banner is dismissed */}
         {!showDemoBanner && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center flex-shrink-0">
-            <p className="text-blue-800 font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
+          <div className="glass-effect rounded-xl p-6 text-center flex-shrink-0 shadow-lg">
+            <p className="text-gray-800 font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
           </div>
         )}
 
         {/* Nearby Responders Card */}
         <div className="grid grid-cols-1 gap-4 flex-shrink-0">
-          <Card className="border-blue-200 bg-blue-50">
-            <CardContent className="p-4">
+          <Card className="glass-effect border-0 shadow-lg">
+            <CardContent className="p-6">
               <div className="flex items-center space-x-3">
-                <Users className="w-8 h-8 text-blue-600" />
+                <Users className="w-8 h-8 text-gray-700" />
                 <div>
-                  <p className="text-sm font-medium text-blue-800">Nearby Responders</p>
-                  <p className="text-lg font-bold text-blue-600">{nearbyResponders.length}</p>
+                  <p className="text-sm font-medium text-gray-700">Nearby Responders</p>
+                  <p className="text-2xl font-bold text-gray-900">{nearbyResponders.length}</p>
                 </div>
               </div>
             </CardContent>
@@ -265,7 +265,7 @@ const DemoMode = ({
         </div>
 
         {/* Emergency Button Section with Map as Background */}
-        <Card className="border-2 border-emergency-200 relative overflow-hidden flex-1 flex flex-col">
+        <Card className="glass-effect border-0 shadow-xl relative overflow-hidden flex-1 flex flex-col">
           {/* Map as Background */}
           <div className="absolute inset-0">
             <ResponderMap 
@@ -279,7 +279,7 @@ const DemoMode = ({
           </div>
           
           {/* Content Overlay */}
-          <div className="relative z-10 bg-white/95 backdrop-blur-sm flex-1 flex flex-col">
+          <div className="relative z-10 glass-effect bg-white/95 backdrop-blur-md flex-1 flex flex-col">
             <CardHeader className="text-center flex-shrink-0">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
               <p className="text-gray-600">
@@ -290,7 +290,7 @@ const DemoMode = ({
               {/* Emergency Services Dialog - Integrated into card */}
               {showEmergencyDialog && (
                 <div className="w-full max-w-md animate-fade-in">
-                  <Card className="border-red-300 bg-red-50">
+                  <Card className="glass-effect border-0 shadow-xl bg-red-50/90">
                     <CardHeader className="text-center">
                       <div className="flex items-center justify-center space-x-2 mb-2">
                         <Phone className="w-8 h-8 text-red-600" />
@@ -302,13 +302,13 @@ const DemoMode = ({
                       <p className="text-red-700">
                         Emergency services will be contacted automatically in:
                       </p>
-                      <div className="text-4xl font-bold text-red-600">
+                      <div className="text-4xl font-bold emergency-text-gradient">
                         {countdown}
                       </div>
                       <Button 
                         onClick={handleCancelEmergencyServices}
                         variant="outline"
-                        className="border-red-300 text-red-700 hover:bg-red-100"
+                        className="glass-effect border-0 text-red-700 hover:bg-red-100/80 shadow-lg"
                       >
                         Cancel - Don't Contact Emergency Services
                       </Button>
@@ -337,7 +337,7 @@ const DemoMode = ({
                   {/* Only show Demo Alert Active card if alert has been sent */}
                   {activeAlert && alertSent && (
                     <div className="animate-fade-in w-full max-w-md space-y-4">
-                      <Card className="border-blue-300 bg-blue-50">
+                      <Card className="glass-effect border-0 shadow-lg bg-blue-50/90">
                         <CardContent className="p-4">
                           <div className="flex items-center space-x-3">
                             <AlertCircle className="w-6 h-6 text-blue-600" />
@@ -353,7 +353,7 @@ const DemoMode = ({
                       
                       {/* Event Timeline */}
                       {timelineEvents.length > 0 && (
-                        <Card className="border-gray-200 bg-white">
+                        <Card className="glass-effect border-0 shadow-lg bg-white/95">
                           <CardHeader className="pb-3">
                             <CardTitle className="text-lg flex items-center space-x-2">
                               <Clock className="w-5 h-5" />
@@ -363,7 +363,7 @@ const DemoMode = ({
                           <CardContent className="space-y-3 max-h-64 overflow-y-auto">
                             {timelineEvents.map((event, index) => (
                               <div key={event.id} className="animate-fade-in">
-                                <div className="flex items-start space-x-3 p-3 rounded-lg border border-gray-100 bg-gray-50">
+                                <div className="flex items-start space-x-3 p-3 rounded-xl glass-effect bg-white/60 shadow-sm">
                                   {event.avatar ? (
                                     <Avatar className="h-8 w-8 flex-shrink-0">
                                       <AvatarImage 
