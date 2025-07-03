@@ -228,7 +228,7 @@ const Index = () => {
             <CardHeader className="text-center pb-4">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
               <p className="text-gray-600">
-                {!alertSent ? "Press the button below if you need immediate assistance" : "Emergency services will be contacted automatically"}
+                {!alertSent ? "Press the button below if you need immediate assistance" : "Local first responders will be contacted automatically"}
               </p>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-6 pb-8">

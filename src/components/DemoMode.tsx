@@ -46,6 +46,7 @@ const DemoMode = ({
   const [showDemoBanner, setShowDemoBanner] = useState(true);
   const [alertSent, setAlertSent] = useState(false);
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([]);
+  const [emergencyServicesCancelled, setEmergencyServicesCancelled] = useState(false);
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const emergencyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const responderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -67,7 +68,7 @@ const DemoMode = ({
     addTimelineEvent({
       type: 'alert',
       title: 'Alert sent! 🚨',
-      description: 'Your emergency alert has been sent. Emergency services will be contacted shortly.',
+      description: 'Your emergency alert has been sent. Local first responders will be contacted shortly.',
       timestamp: new Date()
     });
 
@@ -110,15 +111,17 @@ const DemoMode = ({
         avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
       });
       
-      // Show first responder arrival 3 seconds after Marcus arrives
-      setTimeout(() => {
-        addTimelineEvent({
-          type: 'emergency',
-          title: '🚑 First Responder Arrival',
-          description: 'Emergency medical technician has arrived on scene and is coordinating with Marcus.',
-          timestamp: new Date()
-        });
-      }, 3000);
+      // Show first responder arrival only if emergency services weren't cancelled
+      if (!emergencyServicesCancelled) {
+        setTimeout(() => {
+          addTimelineEvent({
+            type: 'emergency',
+            title: '🚑 Local First Responder Arrival',
+            description: 'Local emergency medical technician has arrived on scene and is coordinating with Marcus.',
+            timestamp: new Date()
+          });
+        }, 3000);
+      }
     }, 5000);
   };
 
@@ -136,11 +139,11 @@ const DemoMode = ({
             countdownIntervalRef.current = null;
             setShowEmergencyDialog(false);
             
-            // Emergency services contacted at T+10 seconds
+            // Local First Responders contacted at T+10 seconds
             addTimelineEvent({
               type: 'emergency',
-              title: '🚨 Emergency Services Contacted',
-              description: 'Police and ambulance have been notified and are on their way. Your location has been shared with emergency services. Nearby responders have also been alerted.',
+              title: '🚨 Local First Responders Contacted',
+              description: 'Police and ambulance have been notified and are on their way. Your location has been shared with local first responders. Nearby responders have also been alerted.',
               timestamp: new Date()
             });
             
@@ -164,11 +167,12 @@ const DemoMode = ({
   const handleCancelEmergencyServices = () => {
     clearAllTimeouts();
     setShowEmergencyDialog(false);
+    setEmergencyServicesCancelled(true);
     
     addTimelineEvent({
       type: 'alert',
-      title: 'Emergency Services Cancelled',
-      description: 'Emergency services will not be contacted. Showing nearby responders instead.',
+      title: 'Local First Responders Cancelled',
+      description: 'Local first responders will not be contacted. Showing nearby responders instead.',
       timestamp: new Date()
     });
 
@@ -290,7 +294,7 @@ const DemoMode = ({
             <CardHeader className="text-center flex-shrink-0">
               <CardTitle className="text-2xl text-gray-900">Emergency Response Center</CardTitle>
               <p className="text-gray-600">
-                {!alertSent ? "Press the button below if you need immediate assistance" : "Emergency services will be contacted automatically"}
+                {!alertSent ? "Press the button below if you need immediate assistance" : "Local first responders will be contacted automatically"}
               </p>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-6 flex-1 justify-center">
@@ -303,11 +307,11 @@ const DemoMode = ({
                         <Phone className="w-8 h-8 text-red-600" />
                         <AlertCircle className="w-8 h-8 text-red-600 animate-pulse" />
                       </div>
-                      <CardTitle className="text-red-800">Contact Emergency Services?</CardTitle>
+                      <CardTitle className="text-red-800">Contact Local First Responders?</CardTitle>
                     </CardHeader>
                     <CardContent className="text-center space-y-4">
                       <p className="text-red-700">
-                        Emergency services will be contacted automatically in:
+                        Local first responders will be contacted automatically in:
                       </p>
                       <div className="text-4xl font-bold emergency-text-gradient">
                         {countdown}
@@ -317,7 +321,7 @@ const DemoMode = ({
                         variant="outline"
                         className="glass-effect border-0 text-red-700 hover:bg-red-100/80 shadow-lg"
                       >
-                        Cancel - Don't Contact Emergency Services
+                        Cancel - Don't Contact Local First Responders
                       </Button>
                     </CardContent>
                   </Card>
