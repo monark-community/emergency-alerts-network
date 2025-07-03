@@ -112,16 +112,17 @@ const DemoMode = ({
       });
       
       // Show first responder arrival only if emergency services weren't cancelled
-      if (!emergencyServicesCancelled) {
-        setTimeout(() => {
+      setTimeout(() => {
+        // Check cancellation state when timeout executes, not when it's set
+        if (!emergencyServicesCancelled) {
           addTimelineEvent({
             type: 'emergency',
             title: '🚑 Local First Responder Arrival',
             description: 'Local emergency medical technician has arrived on scene and is coordinating with Marcus.',
             timestamp: new Date()
           });
-        }, 3000);
-      }
+        }
+      }, 3000);
     }, 5000);
   };
 
