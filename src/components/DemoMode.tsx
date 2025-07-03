@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet } from 'lucide-react';
+import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet, Clock, CheckCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import EmergencyButton from '@/components/EmergencyButton';
@@ -23,6 +23,15 @@ interface DemoModeProps {
   userReputation: number;
 }
 
+interface TimelineEvent {
+  id: string;
+  type: 'alert' | 'emergency' | 'responder' | 'arrival';
+  title: string;
+  description: string;
+  timestamp: Date;
+  avatar?: string;
+}
+
 const DemoMode = ({ 
   onExit, 
   userLocation, 
@@ -36,6 +45,7 @@ const DemoMode = ({
   const [countdown, setCountdown] = useState(10);
   const [showDemoBanner, setShowDemoBanner] = useState(true);
   const [alertSent, setAlertSent] = useState(false);
+  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([]);
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const emergencyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const responderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -46,13 +56,19 @@ const DemoMode = ({
     address: "0x742d35Cc6634C0532925a3b8D9c6C05Ae5c74324"
   };
 
+  const addTimelineEvent = (event: Omit<TimelineEvent, 'id'>) => {
+    const newEvent = { ...event, id: Date.now().toString() };
+    setTimelineEvents(prev => [newEvent, ...prev]);
+  };
+
   const handleSendAlert = () => {
     setAlertSent(true);
     
-    toast({
-      title: "Alert sent! 🚨",
-      description: "Your emergency alert has been sent. Emergency services will be contacted shortly.",
-      className: "border-emergency-500"
+    addTimelineEvent({
+      type: 'alert',
+      title: 'Alert sent! 🚨',
+      description: 'Your emergency alert has been sent. Emergency services will be contacted shortly.',
+      timestamp: new Date()
     });
 
     console.log('Demo alert sent');
@@ -74,44 +90,24 @@ const DemoMode = ({
   };
 
   const showResponderNotifications = () => {
-    toast({
-      title: (
-        <div className="flex items-center space-x-3">
-          <Avatar className="h-8 w-8 flex-shrink-0">
-            <AvatarImage 
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-              alt="Marcus J."
-              className="object-cover"
-            />
-            <AvatarFallback>MJ</AvatarFallback>
-          </Avatar>
-          <span>🚨 Verified Responder On The Way!</span>
-        </div>
-      ) as any,
-      description: "Marcus J. is 2 minutes away and heading to your location. Your location has been shared with the verified responder.",
-      className: "border-safe-500 bg-safe-50"
+    addTimelineEvent({
+      type: 'responder',
+      title: '🚨 Verified Responder On The Way!',
+      description: 'Marcus J. is 2 minutes away and heading to your location. Your location has been shared with the verified responder.',
+      timestamp: new Date(),
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     });
     
     setShowResponderPin(true);
     
     // Show responder arrival 5 seconds after responder notification
     responderTimeoutRef.current = setTimeout(() => {
-      toast({
-        title: (
-          <div className="flex items-center space-x-3">
-            <Avatar className="h-8 w-8 flex-shrink-0">
-              <AvatarImage 
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                alt="Marcus J."
-                className="object-cover"
-              />
-              <AvatarFallback>MJ</AvatarFallback>
-            </Avatar>
-            <span>✅ Responder Has Arrived</span>
-          </div>
-        ) as any,
-        description: "Marcus J. has arrived at your location and is ready to assist.",
-        className: "border-green-500 bg-green-50"
+      addTimelineEvent({
+        type: 'arrival',
+        title: '✅ Responder Has Arrived',
+        description: 'Marcus J. has arrived at your location and is ready to assist.',
+        timestamp: new Date(),
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
       });
     }, 5000);
   };
@@ -131,10 +127,11 @@ const DemoMode = ({
             setShowEmergencyDialog(false);
             
             // Emergency services contacted at T+10 seconds
-            toast({
-              title: "🚨 Emergency Services Contacted",
-              description: "Police and ambulance have been notified and are on their way. Your location has been shared with emergency services. Nearby responders have also been alerted.",
-              className: "border-red-500 bg-red-50"
+            addTimelineEvent({
+              type: 'emergency',
+              title: '🚨 Emergency Services Contacted',
+              description: 'Police and ambulance have been notified and are on their way. Your location has been shared with emergency services. Nearby responders have also been alerted.',
+              timestamp: new Date()
             });
             
             // Show responder notification 5 seconds after emergency services (T+15 seconds)
@@ -158,10 +155,11 @@ const DemoMode = ({
     clearAllTimeouts();
     setShowEmergencyDialog(false);
     
-    toast({
-      title: "Emergency Services Cancelled",
-      description: "Emergency services will not be contacted. Showing nearby responders instead.",
-      className: "border-yellow-500 bg-yellow-50"
+    addTimelineEvent({
+      type: 'alert',
+      title: 'Emergency Services Cancelled',
+      description: 'Emergency services will not be contacted. Showing nearby responders instead.',
+      timestamp: new Date()
     });
 
     // Show responder notifications immediately (2 seconds after cancel)
@@ -338,7 +336,7 @@ const DemoMode = ({
                   
                   {/* Only show Demo Alert Active card if alert has been sent */}
                   {activeAlert && alertSent && (
-                    <div className="animate-fade-in w-full max-w-md">
+                    <div className="animate-fade-in w-full max-w-md space-y-4">
                       <Card className="border-blue-300 bg-blue-50">
                         <CardContent className="p-4">
                           <div className="flex items-center space-x-3">
@@ -352,6 +350,53 @@ const DemoMode = ({
                           </div>
                         </CardContent>
                       </Card>
+                      
+                      {/* Event Timeline */}
+                      {timelineEvents.length > 0 && (
+                        <Card className="border-gray-200 bg-white">
+                          <CardHeader className="pb-3">
+                            <CardTitle className="text-lg flex items-center space-x-2">
+                              <Clock className="w-5 h-5" />
+                              <span>Event Timeline</span>
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-3 max-h-64 overflow-y-auto">
+                            {timelineEvents.map((event, index) => (
+                              <div key={event.id} className="animate-fade-in">
+                                <div className="flex items-start space-x-3 p-3 rounded-lg border border-gray-100 bg-gray-50">
+                                  {event.avatar ? (
+                                    <Avatar className="h-8 w-8 flex-shrink-0">
+                                      <AvatarImage 
+                                        src={event.avatar} 
+                                        alt="Responder"
+                                        className="object-cover"
+                                      />
+                                      <AvatarFallback>R</AvatarFallback>
+                                    </Avatar>
+                                  ) : (
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                      event.type === 'emergency' ? 'bg-red-100' :
+                                      event.type === 'responder' ? 'bg-blue-100' :
+                                      event.type === 'arrival' ? 'bg-green-100' :
+                                      'bg-orange-100'
+                                    }`}>
+                                      {event.type === 'emergency' ? <Phone className="w-4 h-4 text-red-600" /> :
+                                       event.type === 'responder' ? <Users className="w-4 h-4 text-blue-600" /> :
+                                       event.type === 'arrival' ? <CheckCircle className="w-4 h-4 text-green-600" /> :
+                                       <AlertCircle className="w-4 h-4 text-orange-600" />}
+                                    </div>
+                                  )}
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-medium text-gray-900 text-sm">{event.title}</p>
+                                    <p className="text-gray-600 text-xs mt-1">{event.description}</p>
+                                    <p className="text-gray-400 text-xs mt-1">{event.timestamp.toLocaleTimeString()}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </CardContent>
+                        </Card>
+                      )}
                     </div>
                   )}
                 </>
