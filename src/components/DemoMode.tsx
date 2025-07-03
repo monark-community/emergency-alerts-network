@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet, Clock, CheckCircle } from 'lucide-react';
+import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet, Clock, CheckCircle, Play } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import EmergencyButton from '@/components/EmergencyButton';
@@ -181,9 +181,9 @@ const DemoMode = ({
         <div className="fixed top-0 left-0 right-0 glass-effect bg-blue-600/90 text-white px-4 py-3 flex items-center justify-between z-[60] shadow-xl backdrop-blur-md">
           <div className="flex items-center space-x-3">
             <div className="w-6 h-6 bg-blue-500/80 rounded-full flex items-center justify-center">
-              <Shield className="w-4 h-4 text-white" />
+              <Play className="w-4 h-4 text-white" />
             </div>
-            <p className="font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
+            <p className="font-medium">🎮 Demo Mode Active - Experience the Guardian emergency response system</p>
           </div>
           <Button
             variant="ghost"
@@ -245,7 +245,7 @@ const DemoMode = ({
         {/* Demo Banner - Only show if persistent banner is dismissed */}
         {!showDemoBanner && (
           <div className="glass-effect rounded-xl p-6 text-center flex-shrink-0 shadow-lg">
-            <p className="text-gray-800 font-medium">🎯 Demo Mode Active - Experience the Guardian emergency response system</p>
+            <p className="text-gray-800 font-medium">🎮 Demo Mode Active - Experience the Guardian emergency response system</p>
           </div>
         )}
 
@@ -337,13 +337,13 @@ const DemoMode = ({
                   {/* Only show Demo Alert Active card if alert has been sent */}
                   {activeAlert && alertSent && (
                     <div className="animate-fade-in w-full max-w-md space-y-4">
-                      <Card className="glass-effect border-0 shadow-lg bg-blue-50/90">
+                      <Card className="border border-blue-200 bg-blue-50 shadow-lg">
                         <CardContent className="p-4">
                           <div className="flex items-center space-x-3">
-                            <AlertCircle className="w-6 h-6 text-blue-600" />
+                            <Play className="w-6 h-6 text-blue-600" />
                             <div>
                               <p className="font-semibold text-blue-800">Demo Alert Active</p>
-                              <p className="text-sm text-blue-600">
+                              <p className="text-sm text-blue-700">
                                 Demo started at {activeAlert.timestamp.toLocaleTimeString()}
                               </p>
                             </div>
