@@ -109,6 +109,16 @@ const DemoMode = ({
         timestamp: new Date(),
         avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
       });
+      
+      // Show first responder arrival 3 seconds after Marcus arrives
+      setTimeout(() => {
+        addTimelineEvent({
+          type: 'emergency',
+          title: '🚑 First Responder Arrival',
+          description: 'Emergency medical technician has arrived on scene and is coordinating with Marcus.',
+          timestamp: new Date()
+        });
+      }, 3000);
     }, 5000);
   };
 
