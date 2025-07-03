@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet, Clock, CheckCircle, Play } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { AlertCircle, MapPin, Shield, Users, X, Phone, User, Wallet, Clock, CheckCircle, Play, StopCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import EmergencyButton from '@/components/EmergencyButton';
@@ -13,6 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface DemoModeProps {
   onExit: () => void;
@@ -47,10 +56,16 @@ const DemoMode = ({
   const [alertSent, setAlertSent] = useState(false);
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([]);
   const [emergencyServicesCancelled, setEmergencyServicesCancelled] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [securityAnswer, setSecurityAnswer] = useState('');
   const emergencyServicesCancelledRef = useRef(false);
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const emergencyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const responderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Security question for demo
+  const securityQuestion = "What is your mother's maiden name?";
+  const correctAnswer = "Johnson"; // Demo answer
 
   // Mock wallet data for demo
   const mockWallet = {
@@ -183,6 +198,48 @@ const DemoMode = ({
     emergencyTimeoutRef.current = setTimeout(() => {
       showResponderNotifications();
     }, 2000);
+  };
+
+  const handleCancelAlert = () => {
+    setShowCancelDialog(true);
+  };
+
+  const handleConfirmCancelAlert = () => {
+    if (securityAnswer.toLowerCase().trim() === correctAnswer.toLowerCase()) {
+      // Clear all timeouts and reset state
+      clearAllTimeouts();
+      setAlertSent(false);
+      setShowResponderPin(false);
+      setEmergencyServicesCancelled(false);
+      emergencyServicesCancelledRef.current = false;
+      setShowCancelDialog(false);
+      setSecurityAnswer('');
+      
+      addTimelineEvent({
+        type: 'alert',
+        title: '❌ Alert Cancelled',
+        description: 'Emergency alert has been cancelled by the sender. All responders have been notified.',
+        timestamp: new Date()
+      });
+
+      toast({
+        title: "Alert Cancelled",
+        description: "Your emergency alert has been successfully cancelled.",
+        className: "border-gray-500"
+      });
+    } else {
+      toast({
+        title: "Incorrect Answer",
+        description: "The security answer is incorrect. Alert remains active.",
+        variant: "destructive"
+      });
+      setSecurityAnswer('');
+    }
+  };
+
+  const handleCloseCancelDialog = () => {
+    setShowCancelDialog(false);
+    setSecurityAnswer('');
   };
 
   useEffect(() => {
@@ -353,14 +410,25 @@ const DemoMode = ({
                     <div className="animate-fade-in w-full max-w-md space-y-4">
                       <Card className="border border-blue-200 bg-blue-50 shadow-lg">
                         <CardContent className="p-4">
-                          <div className="flex items-center space-x-3">
-                            <Play className="w-6 h-6 text-blue-600" />
-                            <div>
-                              <p className="font-semibold text-blue-800">Demo Alert Active</p>
-                              <p className="text-sm text-blue-700">
-                                Demo started at {activeAlert.timestamp.toLocaleTimeString()}
-                              </p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <Play className="w-6 h-6 text-blue-600" />
+                              <div>
+                                <p className="font-semibold text-blue-800">Demo Alert Active</p>
+                                <p className="text-sm text-blue-700">
+                                  Demo started at {activeAlert.timestamp.toLocaleTimeString()}
+                                </p>
+                              </div>
                             </div>
+                            <Button
+                              onClick={handleCancelAlert}
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 border-red-300 hover:bg-red-50"
+                            >
+                              <StopCircle className="w-4 h-4 mr-1" />
+                              Cancel
+                            </Button>
                           </div>
                         </CardContent>
                       </Card>
@@ -419,6 +487,48 @@ const DemoMode = ({
           </div>
         </Card>
       </div>
+
+      {/* Security Question Dialog */}
+      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-red-800">Cancel Emergency Alert</DialogTitle>
+            <DialogDescription>
+              To cancel this emergency alert, please answer the security question to verify your identity.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-2">Security Question:</p>
+              <p className="text-gray-900">{securityQuestion}</p>
+            </div>
+            <div>
+              <Input
+                type="text"
+                placeholder="Enter your answer"
+                value={securityAnswer}
+                onChange={(e) => setSecurityAnswer(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleConfirmCancelAlert()}
+                className="w-full"
+              />
+            </div>
+          </div>
+          <DialogFooter className="flex space-x-2">
+            <Button
+              variant="outline"
+              onClick={handleCloseCancelDialog}
+            >
+              Keep Alert Active
+            </Button>
+            <Button
+              onClick={handleConfirmCancelAlert}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Cancel Alert
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
